@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using AklimaGeldikce.Models;
+using AklimaGeldikce.Web.Models;
 
-namespace AklimaGeldikce.Controllers
+namespace AklimaGeldikce.Web.Controllers
 {
     public class HomeController : Controller
     {

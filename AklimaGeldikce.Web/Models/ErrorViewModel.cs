@@ -1,6 +1,6 @@
 using System;
 
-namespace AklimaGeldikce.Models
+namespace AklimaGeldikce.Web.Models
 {
     public class ErrorViewModel
     {

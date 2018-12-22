@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AklimaGeldikce.Entities\AklimaGeldikce.Entities.csproj" />
+    <ProjectReference Include="..\AklimaGeldikce.Repositories\AklimaGeldikce.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
