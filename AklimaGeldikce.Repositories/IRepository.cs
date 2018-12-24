@@ -45,9 +45,9 @@ namespace AklimaGeldikce.Repositories
 
         bool Exists(Expression<Func<TEntity, bool>> predicate);
 
-        IList<TEntity> FromSql(RawSqlString rawSqlString, params object[] parameters);
+        IList<TEntity> FromSql(string rawSqlString, params object[] parameters);
         //IQueryable<TEntity> FromSqlQueryable(RawSqlString rawSqlString, params object[] parameters);
-        Task<PagedList<TEntity>> FromSqlAsync(RawSqlString rawSqlString, int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params object[] parameters);
+        Task<PagedList<TEntity>> FromSqlAsync(string rawSqlString, int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params object[] parameters);
 
         Task<IList<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
         Task<PagedList<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> where, int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);

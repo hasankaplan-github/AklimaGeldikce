@@ -13,7 +13,7 @@ namespace AklimaGeldikce.Entities
         }
 
         public string Name { get; set; }
-        public Guid ParentCategoryId { get; set; }
+        public Guid? ParentCategoryId { get; set; }
         public Category ParentCategory { get; set; }
         public IList<Category> ChildCategories { get; set; }
         public IList<CategoryPost> CategoryPosts { get; set; }

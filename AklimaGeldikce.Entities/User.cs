@@ -11,6 +11,7 @@ namespace AklimaGeldikce.Entities
             this.Posts = new List<Post>();
             this.AppLevelLogs = new List<AppLevelLog>();
             this.RoleUsers = new List<RoleUser>();
+            this.Comments = new List<Comment>();
         }
 
         public string FirstName { get; set; }
@@ -19,6 +20,7 @@ namespace AklimaGeldikce.Entities
         public string Password { get; set; }
         public string Email { get; set; }
         public IList<Post> Posts { get; set; }
+        public IList<Comment> Comments { get; set; }
         public IList<AppLevelLog> AppLevelLogs { get; set; }
         public bool IsLoggedIn { get; set; }
         public DateTime LastLoginDate { get; set; }

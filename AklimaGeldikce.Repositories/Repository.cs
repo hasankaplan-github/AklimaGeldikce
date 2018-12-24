@@ -274,7 +274,7 @@ namespace AklimaGeldikce.Repositories
             return this.dbSet.Any(predicate);
         }
 
-        public IList<TEntity> FromSql(RawSqlString rawSqlString, params object[] parameters)
+        public IList<TEntity> FromSql(string rawSqlString, params object[] parameters)
         {
             return this.dbSet.FromSql<TEntity>(rawSqlString, parameters).ToList();
         }
@@ -286,7 +286,7 @@ namespace AklimaGeldikce.Repositories
         }
         */
 
-        public async Task<PagedList<TEntity>> FromSqlAsync(RawSqlString rawSqlString, int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params object[] parameters)
+        public async Task<PagedList<TEntity>> FromSqlAsync(string rawSqlString, int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params object[] parameters)
         {
             var source = this.dbSet.FromSql<TEntity>(rawSqlString, parameters);
             if(orderBy!=null)

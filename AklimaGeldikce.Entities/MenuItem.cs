@@ -15,7 +15,7 @@ namespace AklimaGeldikce.Entities
         public string Name { get; set; }
         public string Controller { get; set; }
         public string Action { get; set; }
-        public Guid ParentMenuItemId { get; set; }
+        public Guid? ParentMenuItemId { get; set; }
         public MenuItem ParentMenuItem { get; set; }
         public IList<MenuItem> ChildMenuItems { get; set; }
         public int Order { get; set; }
