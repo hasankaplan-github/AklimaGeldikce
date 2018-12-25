@@ -23,8 +23,8 @@ namespace AklimaGeldikce.Entities
         public IList<Comment> Comments { get; set; }
         public IList<AppLevelLog> AppLevelLogs { get; set; }
         public bool IsLoggedIn { get; set; }
-        public DateTime LastLoginDate { get; set; }
-        public DateTime LastLogoutDate { get; set; }
+        public DateTime? LastLoginDate { get; set; }
+        public DateTime? LastLogoutDate { get; set; }
         public IList<RoleUser> RoleUsers { get; set; }
     }
 }
