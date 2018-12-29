@@ -112,6 +112,11 @@ namespace AklimaGeldikce.Services
             this.unitOfWork.SaveChanges();
         }
 
+        public TEntity Get(Expression<Func<TEntity, bool>> where)
+        {
+            return this.repository.Get(where);
+        }
+
         public IList<TEntity> GetAll(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             return this.repository.GetAll(orderBy);
@@ -145,6 +150,16 @@ namespace AklimaGeldikce.Services
         public async Task<PagedList<TEntity>> GetAllDeletedAsync(int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             return await this.repository.GetAllDeletedAsync(pageIndex, pageSize, orderBy);
+        }
+
+        public async Task<IList<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        {
+            return await this.repository.GetManyAsync(where, orderBy);
+        }
+
+        public async Task<IList<TEntity>> GetManyDeletedAsync(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        {
+            return await this.repository.GetManyDeletedAsync(where, orderBy);
         }
     }
 }
