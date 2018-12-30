@@ -38,6 +38,7 @@ namespace AklimaGeldikce.Web
             services.AddTransient<IRoleUserService, RoleUserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IMenuItemService, MenuItemService>();
+            services.AddTransient<IRoleMenuItemService, RoleMenuItemService>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
