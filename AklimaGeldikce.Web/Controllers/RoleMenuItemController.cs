@@ -124,12 +124,12 @@ namespace AklimaGeldikce.Web.Controllers
             }
 
             var roleMenuItem = this.roleMenuItemService.GetById(id);
-            var menuItem = this.menuItemService.GetById(roleMenuItem.MenuItemId);
-            var role = this.roleService.GetById(roleMenuItem.RoleId);
             if (roleMenuItem == null)
             {
                 return NotFound();
             }
+            var menuItem = this.menuItemService.GetById(roleMenuItem.MenuItemId);
+            var role = this.roleService.GetById(roleMenuItem.RoleId);
 
             return View(roleMenuItem);
         }
