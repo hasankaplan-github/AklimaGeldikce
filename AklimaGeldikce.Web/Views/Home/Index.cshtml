@@ -53,6 +53,12 @@
     </a>
 </div>
 
+
+<input type="text" id="testText" />
+<button type="button" id="ajaxTest">test</button>
+
+
+
 <div class="row">
     <div class="col-md-3">
         <h2>Application uses</h2>
@@ -92,3 +98,38 @@
         </ul>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#ajaxTest").click(function () {
+                //debugger;
+                var data = {};
+                data.testText = 'testText';
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AjaxTest", "Home")',
+                    cache: false,
+                    //contentType: "application/json; charset=utf-8",
+                    data: {test: $("#testText").val() },
+                    //data: {test:"testText"},
+                    //dataType: "json",
+                    success: function (response) {
+                        if (response == null) {
+                            alert("null");
+                        }
+                        else {
+                            alert("Hello: " + response.name);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -230,5 +230,72 @@ namespace AklimaGeldikce.Web.Controllers
         {
             return this.userService.Exists(u => u.Id == id);
         }
+
+        // GET: Account
+        public async Task<IActionResult> Authorize(Guid id)
+        {
+            var user = this.userService.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var roleUsers = await this.roleUserService.GetManyAsync(ru => ru.UserId == id);
+            foreach (var roleUser in roleUsers)
+            {
+                var role = this.roleService.GetById(roleUser.RoleId);
+            }
+            ViewBag.RoleSelectList = new SelectList(await this.roleService.GetAllAsync(), "Id", "Name");
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Authorize(Guid userId, Guid roleId)
+        {
+            RoleUser roleUser = this.roleUserService.Get(ru => ru.RoleId == roleId && ru.UserId == userId);
+            if(roleUser==null)
+            {
+                roleUser = new RoleUser { UserId = userId, RoleId = roleId };
+                this.roleUserService.Create(roleUser);
+            }
+            else
+            {
+                return Json(null);
+            }
+
+            var roleUsers = await this.roleUserService.GetManyAsync(ru => ru.UserId == userId);
+            string roleNames = "";
+            foreach (var _roleUser in roleUsers)
+            {
+                var role = this.roleService.GetById(_roleUser.RoleId);
+                roleNames += role.Name + ",";
+            }
+
+            //JsonResult jsonResult = role == null ? Json(null) : Json(new { RoleName = role.Name });
+            return Json(new { RoleNames = roleNames });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveAuthorization(Guid userId, Guid roleId)
+        {
+            RoleUser roleUser = this.roleUserService.Get(ru => ru.RoleId == roleId && ru.UserId == userId);
+            if (roleUser == null)
+            {
+                return Json(null);
+            }
+            this.roleUserService.Delete(roleUser);
+
+            var roleUsers = await this.roleUserService.GetManyAsync(ru => ru.UserId == userId);
+            string roleNames = "";
+            foreach (var _roleUser in roleUsers)
+            {
+                var role = this.roleService.GetById(_roleUser.RoleId);
+                roleNames += role.Name + ",";
+            }
+
+            //JsonResult jsonResult = role == null ? Json(null) : Json(new { RoleName = role.Name });
+            return Json(new { RoleNames = roleNames });
+        }
+
+
     }
 }
