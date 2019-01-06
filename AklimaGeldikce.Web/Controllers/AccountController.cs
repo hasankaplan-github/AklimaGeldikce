@@ -249,7 +249,7 @@ namespace AklimaGeldikce.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorize(Guid userId, Guid roleId)
+        public async Task<IActionResult> AddRole(Guid userId, Guid roleId)
         {
             RoleUser roleUser = this.roleUserService.Get(ru => ru.RoleId == roleId && ru.UserId == userId);
             if(roleUser==null)
@@ -275,7 +275,7 @@ namespace AklimaGeldikce.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveAuthorization(Guid userId, Guid roleId)
+        public async Task<IActionResult> RemoveRole(Guid userId, Guid roleId)
         {
             RoleUser roleUser = this.roleUserService.Get(ru => ru.RoleId == roleId && ru.UserId == userId);
             if (roleUser == null)

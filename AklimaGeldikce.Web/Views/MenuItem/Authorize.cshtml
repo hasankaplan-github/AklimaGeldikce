@@ -1,4 +1,4 @@
-﻿@model AklimaGeldikce.Entities.User
+﻿@model AklimaGeldikce.Entities.MenuItem
 
 @{
     ViewData["Title"] = "Authorize";
@@ -7,32 +7,38 @@
 <h2>Authorize</h2>
 
 <div>
-    <h4>User</h4>
+    <h4>MenuItem</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.SecondName)
+            @Html.DisplayNameFor(model => model.Controller)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.SecondName)
+            @Html.DisplayFor(model => model.Controller)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Username)
+            @Html.DisplayNameFor(model => model.Action)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Username)
+            @Html.DisplayFor(model => model.Action)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.ParentMenuItem)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.ParentMenuItem.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order)
         </dd>
         <dt>
             Roller
@@ -40,9 +46,9 @@
         <dd id="roleNames">
             @{
                 var roleNames = "";
-                foreach (var roleUser in Model.RoleUsers)
+                foreach (var roleMenuItem in Model.RoleMenuItems)
                 {
-                    roleNames += roleUser.Role.Name + ",";
+                    roleNames += roleMenuItem.Role.Name + ",";
                 }
             }
             @roleNames
@@ -52,7 +58,8 @@
     <div class="col-md-4">
 
         <div class="form-group">
-            <input type="hidden" id="userIdHidden" value="@Model.Id" />
+            <input type="hidden" id="menuItemIdHidden" value="@Model.Id" />
+
             <label class="control-label">Eklenecek Rolü Seç:</label>
             <select name="roleId" id="roleId" class="form-control" asp-items="ViewBag.RoleSelectList"></select>
         </div>
@@ -60,13 +67,12 @@
             <button id="addRole" class="btn btn-default">Rolü Ekle</button>
         </div>
         <div class="form-group">
-            <button id="removeRole" class="btn btn-default">Rolü Çıkar</button>
+            <button id="removeRole" class="btn btn-default">Rolü Çıkart</button>
         </div>
     </div>
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
-
 </div>
 
 
@@ -77,10 +83,10 @@
                 //debugger;
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("AddRole", "Account")',
+                    url: '@Url.Action("AddRole", "MenuItem")',
                     cache: false,
                     //contentType: "application/json; charset=utf-8",
-                    data: {userId: $("#userIdHidden").val() , roleId : $("#roleId").val() },
+                    data: {menuItemId: $("#menuItemIdHidden").val() , roleId : $("#roleId").val() },
                     dataType: "json",
                     success: function (response) {
                         if (response == null) {
@@ -104,10 +110,10 @@
                 //debugger;
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("RemoveRole", "Account")',
+                    url: '@Url.Action("RemoveRole", "MenuItem")',
                     cache: false,
                     //contentType: "application/json; charset=utf-8",
-                    data: {userId: $("#userIdHidden").val() , roleId : $("#roleId").val() },
+                    data: {menuItemId: $("#menuItemIdHidden").val() , roleId : $("#roleId").val() },
                     dataType: "json",
                     success: function (response) {
                         if (response == null) {
