@@ -8,6 +8,6 @@ namespace AklimaGeldikce.Services
 {
     public interface IMenuItemService : IBaseService<MenuItem>
     {
-        Task<string> GetNavbarHtmlAsync(Guid? parentPageId, IList<Role> roles, bool isDropdownItem);
+        Task<string> GetNavbarHtmlAsync(Guid? parentMenuItemId, IList<Role> roles, bool isDropdownItem);
     }
 }

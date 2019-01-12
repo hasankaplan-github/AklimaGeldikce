@@ -59,7 +59,10 @@ namespace AklimaGeldikce.Web.Controllers
                 Response.Cookies.Append("loggedInRoleNames", roleNames);
                 Response.Cookies.Append("dynamicNavbar", await this.menuItemService.GetNavbarHtmlAsync(null, roles, false));
                 //return RedirectToAction("ProductList", "Product");
-                return Redirect(returnUrl);
+                if (string.IsNullOrEmpty(returnUrl) == false)
+                    return Redirect(returnUrl);
+                else
+                    return RedirectToAction("Index", "Home");
             }
 
             return View();

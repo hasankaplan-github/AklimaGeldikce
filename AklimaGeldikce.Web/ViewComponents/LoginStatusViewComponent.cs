@@ -30,7 +30,7 @@ namespace AklimaGeldikce.Web.ViewComponents
 
         private bool IsLoggedIn(string loggedInUserId)
         {
-            if (string.IsNullOrEmpty( loggedInUserId ) || loggedInUserId.Equals(Guid.Empty))
+            if (string.IsNullOrEmpty( loggedInUserId ) || loggedInUserId.Equals(Guid.Empty.ToString()))
             {
                 return false;
             }
