@@ -229,7 +229,7 @@ namespace AklimaGeldikce.Repositories
 
         public void UnDelete(Expression<Func<TEntity, bool>> where)
         {
-            var entities = GetMany(where);
+            var entities = GetManyDeleted(where);
             foreach (var entity in entities)
             {
                 UnDelete(entity);
