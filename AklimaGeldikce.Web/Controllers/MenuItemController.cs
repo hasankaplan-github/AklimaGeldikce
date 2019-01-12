@@ -27,11 +27,7 @@ namespace AklimaGeldikce.Web.Controllers
         // GET: MenuItem
         public async Task<IActionResult> Index()
         {
-            var menuItems = await this.menuItemService.GetAllAsync();
-            foreach (var menuItem in menuItems)
-            {
-                var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
-            }
+            var menuItems = (await this.menuItemService.GetAllAsync()).OrderBy(mi=>mi.Name);
             return View(menuItems);
         }
 
@@ -48,7 +44,10 @@ namespace AklimaGeldikce.Web.Controllers
             {
                 return NotFound();
             }
-            var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
+            if(menuItem.ParentMenuItemId!=null)
+            {
+                var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
+            }
 
             return View(menuItem);
         }
@@ -72,7 +71,7 @@ namespace AklimaGeldikce.Web.Controllers
                 this.menuItemService.Create(menuItem);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentMenuItemSelectList"] = new SelectList(await this.menuItemService.GetAllAsync(), "Id", "Name", menuItem.ParentMenuItemId);
+            ViewData["ParentMenuItemSelectList"] = new SelectList((await this.menuItemService.GetAllAsync()).OrderBy(mi=>mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
             return View(menuItem);
         }
 
@@ -89,7 +88,7 @@ namespace AklimaGeldikce.Web.Controllers
             {
                 return NotFound();
             }
-            ViewData["ParentMenuItemSelectList"] = new SelectList(await this.menuItemService.GetAllAsync(), "Id", "Name", menuItem.ParentMenuItemId);
+            ViewData["ParentMenuItemSelectList"] = new SelectList((await this.menuItemService.GetAllAsync()).OrderBy(mi => mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
             return View(menuItem);
         }
 
@@ -124,7 +123,7 @@ namespace AklimaGeldikce.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentMenuItemSelectList"] = new SelectList(await this.menuItemService.GetAllAsync(), "Id", "Name", menuItem.ParentMenuItemId);
+            ViewData["ParentMenuItemSelectList"] = new SelectList((await this.menuItemService.GetAllAsync()).OrderBy(mi => mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
             return View(menuItem);
         }
 
@@ -137,10 +136,13 @@ namespace AklimaGeldikce.Web.Controllers
             }
 
             var menuItem = this.menuItemService.GetById(id);
-            var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
             if (menuItem == null)
             {
                 return NotFound();
+            }
+            if(menuItem.ParentMenuItemId!=null)
+            {
+                var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
             }
 
             return View(menuItem);
