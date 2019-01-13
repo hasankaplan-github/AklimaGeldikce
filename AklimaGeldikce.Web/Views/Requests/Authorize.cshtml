@@ -1,0 +1,121 @@
+﻿@model AklimaGeldikce.Entities.Request
+
+@{
+    ViewData["Title"] = "Authorize";
+}
+
+<h2>Authorize</h2>
+
+<div>
+    <h4>Request</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Controller)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Controller)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Action)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Action)
+        </dd>
+        <dt>
+            Roller
+        </dt>
+        <dd id="roleNames">
+            @{
+                var roleNames = "";
+                foreach (var roleRequest in Model.RoleRequests)
+                {
+                    roleNames += roleRequest.Role.Name + ",";
+                }
+            }
+            @roleNames
+        </dd>
+    </dl>
+
+    <div class="col-md-4">
+
+        <div class="form-group">
+            <input type="hidden" id="requestIdHidden" value="@Model.Id" />
+
+            <label class="control-label">Eklenecek Rolü Seç:</label>
+            <select name="roleId" id="roleId" class="form-control" asp-items="ViewBag.RoleSelectList"></select>
+        </div>
+        <div class="form-group">
+            <button id="addRole" class="btn btn-default">Rolü Ekle</button>
+        </div>
+        <div class="form-group">
+            <button id="removeRole" class="btn btn-default">Rolü Çıkart</button>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#addRole").click(function () {
+                //debugger;
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddRole", "Requests")',
+                    cache: false,
+                    //contentType: "application/json; charset=utf-8",
+                    data: {requestId: $("#requestIdHidden").val() , roleId : $("#roleId").val() },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == null) {
+                            alert("Bu role zaten eklenmiş durumda!");
+                        }
+                        else {
+                            //alert("Hello: " + response.roleNames);
+                            $("#roleNames").html(response.roleNames);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+            $("#removeRole").click(function () {
+                //debugger;
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RemoveRole", "Requests")',
+                    cache: false,
+                    //contentType: "application/json; charset=utf-8",
+                    data: { requestId: $("#requestIdHidden").val() , roleId : $("#roleId").val() },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == null) {
+                            alert("Bu role zaten ekli değil!");
+                        }
+                        else {
+                            //alert("Hello: " + response.roleNames);
+                            $("#roleNames").html(response.roleNames);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

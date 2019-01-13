@@ -30,18 +30,18 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
             var loggedInUserId = Guid.Parse(loggedInUserIdCookie);
             var roleUsers = this.roleUserService.GetMany(ru => ru.UserId == loggedInUserId);
             var request = this.requestService.Get(r => r.Action.Equals(action) && r.Controller.Equals(controller));
-            var roleRequests = this.roleRequestService.GetMany(rr => rr.RequestId == request.Id);
+            var roleRequests = request == null ? new List<RoleRequest>() : this.roleRequestService.GetMany(rr => rr.RequestId == request.Id);
 
             bool isAuthorized = false;
-            IList<Guid> roleRequestRoleIds = new List<Guid>(roleRequests.Count);
-            foreach (var roleRequest in roleRequests)
-            {
-                roleRequestRoleIds.Add(roleRequest.RoleId);
-            }
-
+            IList<Guid> roleUserRoleIds = new List<Guid>(roleUsers.Count);
             foreach (var roleUser in roleUsers)
             {
-                if(roleRequestRoleIds.Contains(roleUser.RoleId))
+                roleUserRoleIds.Add(roleUser.RoleId);
+            }
+
+            foreach (var roleRequest in roleRequests)
+            {
+                if(roleUserRoleIds.Contains(roleRequest.RoleId))
                 {
                     isAuthorized = true;
                     break;
@@ -53,7 +53,7 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
                 //context.HttpContext.Response.Redirect("/Account/Login");
 
                 // Prevent the action from actually being executed
-                context.Result = new RedirectResult("/Account/Login?returnUrl=" + controller + "/" + action);
+                context.Result = new RedirectResult("/Account/Login?returnUrl=\"/" + controller + "/" + action + "\"");
             }
 
             base.OnActionExecuting(context);
