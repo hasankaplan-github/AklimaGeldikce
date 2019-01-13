@@ -161,5 +161,16 @@ namespace AklimaGeldikce.Services
         {
             return await this.repository.GetManyDeletedAsync(where, orderBy);
         }
+
+        public IList<TEntity> GetMany(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        {
+            return this.repository.GetMany(where, orderBy);
+        }
+
+        public IList<TEntity> GetManyDeleted(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        {
+            return this.repository.GetManyDeleted(where, orderBy);
+        }
+
     }
 }

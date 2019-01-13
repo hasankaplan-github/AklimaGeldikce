@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AklimaGeldikce.Services
 {
-    public interface IUserService : IBaseService<User>
+    public interface IRequestService : IBaseService<Request>
     {
-        User Register(User newUser, params string[] roleNames);
     }
 }

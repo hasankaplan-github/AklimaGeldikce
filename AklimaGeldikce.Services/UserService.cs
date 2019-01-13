@@ -5,6 +5,7 @@ using AklimaGeldikce.Entities;
 using AklimaGeldikce.Repositories;
 using AklimaGeldikce.Repositories.UnitOfWork;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AklimaGeldikce.Services
 {
@@ -12,11 +13,15 @@ namespace AklimaGeldikce.Services
     {
         private readonly IRepository<RoleUser> roleUserRepository;
         private readonly IRepository<Role> roleRepository;
+        private readonly IRepository<RoleRequest> roleRequestRepository;
+        private readonly IRepository<Request> requestRepository;
 
         public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this.roleUserRepository = unitOfWork.GetRepository<RoleUser>();
             this.roleRepository = unitOfWork.GetRepository<Role>();
+            this.roleRequestRepository = unitOfWork.GetRepository<RoleRequest>();
+            this.requestRepository = unitOfWork.GetRepository<Request>();
         }
         
         public User Register(User newUser, params string[] roleNames)
