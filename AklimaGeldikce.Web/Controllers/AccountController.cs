@@ -10,9 +10,11 @@ using AklimaGeldikce.Entities;
 using AklimaGeldikce.Web.Models;
 using AklimaGeldikce.Services;
 using Microsoft.AspNetCore.Http;
+using AklimaGeldikce.Web.ActionFilterAttributes;
 
 namespace AklimaGeldikce.Web.Controllers
 {
+    [AuthorizeActionFilter]
     public class AccountController : Controller
     {
         private readonly IUserService userService;

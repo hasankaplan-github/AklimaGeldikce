@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AklimaGeldikce.DbContext;
 using AklimaGeldikce.Entities;
 using AklimaGeldikce.Services;
+using AklimaGeldikce.Web.ActionFilterAttributes;
 
 namespace AklimaGeldikce.Web.Controllers
 {
+    [AuthorizeActionFilter]
     public class RoleController : Controller
     {
         private readonly IRoleService roleService;

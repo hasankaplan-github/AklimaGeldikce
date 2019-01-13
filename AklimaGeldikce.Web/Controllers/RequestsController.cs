@@ -12,7 +12,7 @@ using AklimaGeldikce.Web.ActionFilterAttributes;
 
 namespace AklimaGeldikce.Web.Controllers
 {
-    //[AuthorizeActionFilter]
+    [AuthorizeActionFilter]
     public class RequestsController : Controller
     {
         private readonly IRequestService requestService;
