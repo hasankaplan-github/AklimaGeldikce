@@ -172,5 +172,13 @@ namespace AklimaGeldikce.Services
             return this.repository.GetManyDeleted(where, orderBy);
         }
 
+        public void BulkInsert(IList<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.repository.Add(entity);
+            }
+            this.unitOfWork.SaveChanges();
+        }
     }
 }
