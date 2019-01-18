@@ -37,5 +37,6 @@ namespace AklimaGeldikce.Services
         IList<TEntity> GetManyDeleted(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
 
         void BulkInsert(IList<TEntity> entities);
+        void BulkUpdate(IList<TEntity> entities);
     }
 }

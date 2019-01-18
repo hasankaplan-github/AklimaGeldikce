@@ -180,5 +180,14 @@ namespace AklimaGeldikce.Services
             }
             this.unitOfWork.SaveChanges();
         }
+
+        public void BulkUpdate(IList<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.repository.Update(entity);
+            }
+            this.unitOfWork.SaveChanges();
+        }
     }
 }
