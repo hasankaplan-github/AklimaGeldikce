@@ -16,9 +16,9 @@ namespace AklimaGeldikce.DbContext
         public DbSet<AklimaGeldikce.Entities.RoleRequest> RoleRequest { get; set; }
         public DbSet<AklimaGeldikce.Entities.RoleUser> RoleUser { get; set; }
         public DbSet<AklimaGeldikce.Entities.Category> Category { get; set; }
-        public DbSet<AklimaGeldikce.Entities.CategoryPost> CategoryPost { get; set; }
+        public DbSet<AklimaGeldikce.Entities.CategoryArticle> CategoryPost { get; set; }
         public DbSet<AklimaGeldikce.Entities.MenuItem> MenuItem { get; set; }
-        public DbSet<AklimaGeldikce.Entities.Post> Post { get; set; }
+        public DbSet<AklimaGeldikce.Entities.Article> Post { get; set; }
         public DbSet<AklimaGeldikce.Entities.RoleMenuItem> RoleMenuItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,7 +34,7 @@ namespace AklimaGeldikce.DbContext
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AklimaGeldikce.Entities.Comment>()
-                .HasOne(c => c.OwnerPost)
+                .HasOne(c => c.OwnerArticle)
                 .WithMany(p => p.Comments)
                 .OnDelete(DeleteBehavior.SetNull);
 
@@ -48,9 +48,9 @@ namespace AklimaGeldikce.DbContext
                 .WithMany(m => m.ChildMenuItems)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<AklimaGeldikce.Entities.Post>()
+            modelBuilder.Entity<AklimaGeldikce.Entities.Article>()
                 .HasOne(p => p.Owner)
-                .WithMany(u => u.Posts)
+                .WithMany(u => u.Articles)
                 .OnDelete(DeleteBehavior.SetNull);
         }
     }

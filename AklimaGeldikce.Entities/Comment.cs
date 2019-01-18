@@ -7,8 +7,8 @@ namespace AklimaGeldikce.Entities
     public class Comment : BaseEntity
     {
         public string Content { get; set; }
-        public Guid? OwnerPostId { get; set; }
-        public Post OwnerPost { get; set; }
+        public Guid? OwnerArticleId { get; set; }
+        public Article OwnerArticle { get; set; }
         public Guid? OwnerId { get; set; }
         public User Owner { get; set; }
     }
