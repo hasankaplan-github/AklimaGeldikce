@@ -9,6 +9,7 @@ namespace AklimaGeldikce.Entities
         {
             this.Comments = new List<Comment>();
             this.CategoryArticles = new List<CategoryArticle>();
+            this.ArticleOperations = new List<ArticleOperation>();
         }
 
         public string Title { get; set; }
@@ -18,5 +19,6 @@ namespace AklimaGeldikce.Entities
         public User Owner { get; set; }
         public IList<CategoryArticle> CategoryArticles { get; set; }
         public int ViewCount { get; set; }
+        public IList<ArticleOperation> ArticleOperations { get; set; }
     }
 }

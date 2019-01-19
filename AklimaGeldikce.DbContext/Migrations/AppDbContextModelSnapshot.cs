@@ -60,7 +60,69 @@ namespace AklimaGeldikce.DbContext.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Post");
+                    b.ToTable("Article");
+                });
+
+            modelBuilder.Entity("AklimaGeldikce.Entities.ArticleOperation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AcceptingUserId");
+
+                    b.Property<Guid>("ArticleId");
+
+                    b.Property<Guid>("ArticleStatusId");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("OperationDate");
+
+                    b.Property<Guid>("OperationUserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("ArticleStatusId");
+
+                    b.HasIndex("OperationUserId");
+
+                    b.ToTable("ArticleOperation");
+                });
+
+            modelBuilder.Entity("AklimaGeldikce.Entities.ArticleStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArticleStatus");
+                });
+
+            modelBuilder.Entity("AklimaGeldikce.Entities.ArticleStatusArticleStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("ChildArticleStatusId");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("ParentArticleStatusId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildArticleStatusId");
+
+                    b.HasIndex("ParentArticleStatusId");
+
+                    b.ToTable("ArticleStatusArticleStatus");
                 });
 
             modelBuilder.Entity("AklimaGeldikce.Entities.Category", b =>
@@ -98,7 +160,7 @@ namespace AklimaGeldikce.DbContext.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("CategoryPost");
+                    b.ToTable("CategoryArticle");
                 });
 
             modelBuilder.Entity("AklimaGeldikce.Entities.Comment", b =>
@@ -279,6 +341,37 @@ namespace AklimaGeldikce.DbContext.Migrations
                         .WithMany("Articles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("AklimaGeldikce.Entities.ArticleOperation", b =>
+                {
+                    b.HasOne("AklimaGeldikce.Entities.Article", "Article")
+                        .WithMany("ArticleOperations")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AklimaGeldikce.Entities.ArticleStatus", "ArticleStatus")
+                        .WithMany("ArticleOperations")
+                        .HasForeignKey("ArticleStatusId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AklimaGeldikce.Entities.User", "OperationUser")
+                        .WithMany("ArticleOperations")
+                        .HasForeignKey("OperationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AklimaGeldikce.Entities.ArticleStatusArticleStatus", b =>
+                {
+                    b.HasOne("AklimaGeldikce.Entities.ArticleStatus", "ChildArticleStatus")
+                        .WithMany("ChildArticleStatusArticleStatuses")
+                        .HasForeignKey("ChildArticleStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AklimaGeldikce.Entities.ArticleStatus", "ParentArticleStatus")
+                        .WithMany("ParentArticleStatusArticleStatuses")
+                        .HasForeignKey("ParentArticleStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("AklimaGeldikce.Entities.Category", b =>

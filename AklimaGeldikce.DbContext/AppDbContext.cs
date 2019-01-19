@@ -16,10 +16,13 @@ namespace AklimaGeldikce.DbContext
         public DbSet<AklimaGeldikce.Entities.RoleRequest> RoleRequest { get; set; }
         public DbSet<AklimaGeldikce.Entities.RoleUser> RoleUser { get; set; }
         public DbSet<AklimaGeldikce.Entities.Category> Category { get; set; }
-        public DbSet<AklimaGeldikce.Entities.CategoryArticle> CategoryPost { get; set; }
+        public DbSet<AklimaGeldikce.Entities.CategoryArticle> CategoryArticle { get; set; }
         public DbSet<AklimaGeldikce.Entities.MenuItem> MenuItem { get; set; }
-        public DbSet<AklimaGeldikce.Entities.Article> Post { get; set; }
+        public DbSet<AklimaGeldikce.Entities.Article> Article { get; set; }
         public DbSet<AklimaGeldikce.Entities.RoleMenuItem> RoleMenuItem { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleStatus> ArticleStatus { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleStatusArticleStatus> ArticleStatusArticleStatus { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleOperation> ArticleOperation { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +55,23 @@ namespace AklimaGeldikce.DbContext
                 .HasOne(p => p.Owner)
                 .WithMany(u => u.Articles)
                 .OnDelete(DeleteBehavior.SetNull);
+
+
+            /*many to many relationship*/
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatusArticleStatus>()
+               .HasOne(a=>a.ParentArticleStatus)
+               .WithMany(b => b.ParentArticleStatusArticleStatuses)
+               .HasForeignKey(x=>x.ParentArticleStatusId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            /*many to many relationship*/
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatusArticleStatus>()
+              .HasOne(a => a.ChildArticleStatus)
+              .WithMany(b => b.ChildArticleStatusArticleStatuses)
+              .HasForeignKey(x => x.ChildArticleStatusId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            
         }
     }
 }
