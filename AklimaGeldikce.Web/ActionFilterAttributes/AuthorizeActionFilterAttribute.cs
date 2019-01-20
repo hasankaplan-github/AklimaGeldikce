@@ -27,7 +27,7 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
             string action = context.RouteData.Values["action"].ToString();
             string loggedInUserIdCookie = context.HttpContext.Request.Cookies["loggedInUserId"];
 
-            var loggedInUserId = Guid.Parse(loggedInUserIdCookie);
+            var loggedInUserId = loggedInUserIdCookie == null ? Guid.Empty : Guid.Parse(loggedInUserIdCookie);
             var roleUsers = this.roleUserService.GetMany(ru => ru.UserId == loggedInUserId);
             var request = this.requestService.Get(r => r.Action.Equals(action) && r.Controller.Equals(controller));
             var roleRequests = request == null ? new List<RoleRequest>() : this.roleRequestService.GetMany(rr => rr.RequestId == request.Id);
