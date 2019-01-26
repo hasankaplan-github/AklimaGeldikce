@@ -8,17 +8,18 @@ namespace AklimaGeldikce.Entities
     {
         public Guid ArticleId { get; set; }
         public Article Article { get; set; }
-        public Guid ArticleStatusId { get; set; }
-        public ArticleStatus ArticleStatus { get; set; }
+        public Guid ArticleStatePathId { get; set; }
+        public ArticleStatePath ArticleStatePath { get; set; }
         public DateTime OperationDate { get; set; }
-        public Guid OperationUserId { get; set; }
-        public User OperationUser { get; set; }
-        public Guid AcceptingUserId { get; set; } // makaleyi üstüne alan(kabul eden, atanan) kullanıcı
-        /* üstüme aldığım makaleler:
-         * group by ArticleId
-         * where max OperationDate
-         * and AcceptingUserId = userId
-         */ 
+        public Guid? OperatorUserId { get; set; }
+        public User OperatorUser { get; set; }
+        public Guid? AcceptingUserId { get; set; } 
+        public User AcceptingUser { get; set; } // makaleyi üstüne alan(kabul eden, atanan) kullanıcı
+                                                /* üstüme aldığım makaleler:
+                                                 * group by ArticleId
+                                                 * where OperationDate = max
+                                                 * and AcceptingUserId = userId
+                                                 */
 
     }
 }

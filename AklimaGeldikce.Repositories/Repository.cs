@@ -99,13 +99,12 @@ namespace AklimaGeldikce.Repositories
 
         public void Update(TEntity entity)
         {
-            /*
+            
             if (this.dbContext.Entry(entity).State == EntityState.Detached)
             {
                 this.dbSet.Attach(entity);
             }
-            */
-            this.dbSet.Attach(entity);
+            //this.dbSet.Attach(entity);
             this.dbContext.Entry(entity).State = EntityState.Modified;
         }
 

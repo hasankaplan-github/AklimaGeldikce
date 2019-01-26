@@ -20,9 +20,11 @@ namespace AklimaGeldikce.DbContext
         public DbSet<AklimaGeldikce.Entities.MenuItem> MenuItem { get; set; }
         public DbSet<AklimaGeldikce.Entities.Article> Article { get; set; }
         public DbSet<AklimaGeldikce.Entities.RoleMenuItem> RoleMenuItem { get; set; }
-        public DbSet<AklimaGeldikce.Entities.ArticleStatus> ArticleStatus { get; set; }
-        public DbSet<AklimaGeldikce.Entities.ArticleStatusArticleStatus> ArticleStatusArticleStatus { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleState> ArticleState { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleAction> ArticleAction { get; set; }
         public DbSet<AklimaGeldikce.Entities.ArticleOperation> ArticleOperation { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleStatePath> ArticleStatePath { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleActionRole> ArticleActionRole { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,20 +60,55 @@ namespace AklimaGeldikce.DbContext
 
 
             /*many to many relationship*/
+            /*
             modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatusArticleStatus>()
                .HasOne(a=>a.ParentArticleStatus)
                .WithMany(b => b.ParentArticleStatusArticleStatuses)
                .HasForeignKey(x=>x.ParentArticleStatusId)
                .OnDelete(DeleteBehavior.Restrict);
 
+            */
             /*many to many relationship*/
+            /*
             modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatusArticleStatus>()
               .HasOne(a => a.ChildArticleStatus)
               .WithMany(b => b.ChildArticleStatusArticleStatuses)
               .HasForeignKey(x => x.ChildArticleStatusId)
               .OnDelete(DeleteBehavior.Restrict);
+              */
 
-            
+            /*many to many relationship*/
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleActionRole>()
+               .HasOne(a => a.ArticleAction)
+               .WithMany(b => b.ArticleActionRoles)
+               .HasForeignKey(x => x.ArticleActionId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleActionRole>()
+               .HasOne(a => a.Role)
+               .WithMany(b => b.ArticleActionRoles)
+               .HasForeignKey(x => x.RoleId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleOperation>()
+                .HasOne(p => p.OperatorUser)
+                .WithMany(u => u.ArticleOperations)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
+               .HasOne(p => p.ArticleAction)
+               .WithMany(u => u.ArticleStatePaths)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
+              .HasOne(p => p.DestinationArticleState)
+              .WithMany(u => u.DestinationArticleStatePaths)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
+              .HasOne(p => p.SourceArticleState)
+              .WithMany(u => u.SourceArticleStatePaths)
+              .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
