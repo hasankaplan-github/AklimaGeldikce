@@ -1,18 +1,18 @@
-﻿using System;
+﻿using AklimaGeldikce.Entities;
+using AklimaGeldikce.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AklimaGeldikce.Entities;
-using AklimaGeldikce.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AklimaGeldikce.Web.ViewComponents
 {
-    public class LoginStatusViewComponent : ViewComponent
+    public class SideBarViewComponent : ViewComponent
     {
         private readonly IUserService userService;
 
-        public LoginStatusViewComponent(IUserService userService)
+        public SideBarViewComponent(IUserService userService)
         {
             this.userService = userService;
         }
@@ -30,12 +30,11 @@ namespace AklimaGeldikce.Web.ViewComponents
 
         private bool IsLoggedIn(string loggedInUserId)
         {
-            if (string.IsNullOrEmpty( loggedInUserId ) || loggedInUserId.Equals(Guid.Empty.ToString()))
+            if (string.IsNullOrEmpty(loggedInUserId) || loggedInUserId.Equals(Guid.Empty.ToString()))
             {
                 return false;
             }
             return true;
         }
-
     }
 }

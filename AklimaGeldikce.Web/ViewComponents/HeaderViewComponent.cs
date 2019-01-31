@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AklimaGeldikce.Web.Controllers
 {
-    public class DynamicNavbarViewComponent : ViewComponent
+    public class HeaderViewComponent : ViewComponent
     {
         private readonly IMenuItemService menuItemService;
         private readonly IRoleService roleService;
 
-        public DynamicNavbarViewComponent(IMenuItemService menuItemService, IRoleService roleService)
+        public HeaderViewComponent(IMenuItemService menuItemService, IRoleService roleService)
         {
             this.menuItemService = menuItemService;
             this.roleService = roleService;
@@ -27,7 +27,7 @@ namespace AklimaGeldikce.Web.Controllers
                 dynamicNavbarCookie = await this.menuItemService.GetNavbarHtmlAsync(null, roles, false);
                 HttpContext.Response.Cookies.Append("dynamicNavbar", dynamicNavbarCookie);
             }
-            return View("Default",dynamicNavbarCookie);
+            return View("Default_AdminLte", dynamicNavbarCookie);
         }
     }
 }
