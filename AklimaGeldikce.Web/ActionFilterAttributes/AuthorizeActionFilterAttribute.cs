@@ -33,15 +33,16 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
             var roleRequests = request == null ? new List<RoleRequest>() : this.roleRequestService.GetMany(rr => rr.RequestId == request.Id);
 
             bool isAuthorized = false;
-            IList<Guid> roleUserRoleIds = new List<Guid>(roleUsers.Count);
+            IList<Guid> userRoleIds = new List<Guid>(roleUsers.Count + 1); //+1 for guest roleId
+            userRoleIds.Add(Guid.Empty); // add guest roleId
             foreach (var roleUser in roleUsers)
             {
-                roleUserRoleIds.Add(roleUser.RoleId);
+                userRoleIds.Add(roleUser.RoleId);
             }
 
             foreach (var roleRequest in roleRequests)
             {
-                if(roleUserRoleIds.Contains(roleRequest.RoleId))
+                if(userRoleIds.Contains(roleRequest.RoleId))
                 {
                     isAuthorized = true;
                     break;

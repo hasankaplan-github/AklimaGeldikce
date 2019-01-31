@@ -116,7 +116,7 @@ namespace AklimaGeldikce.Web.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = this.userService.Register(newUser, "Guest", "User");
+                var user = this.userService.Register(newUser, "User");
                 if (user == null)
                 {
                     // error.
