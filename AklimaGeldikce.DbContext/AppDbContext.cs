@@ -54,7 +54,7 @@ namespace AklimaGeldikce.DbContext
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AklimaGeldikce.Entities.Article>()
-                .HasOne(p => p.Owner)
+                .HasOne(p => p.Author)
                 .WithMany(u => u.Articles)
                 .OnDelete(DeleteBehavior.SetNull);
 

@@ -15,8 +15,8 @@ namespace AklimaGeldikce.Entities
         public string Title { get; set; }
         public string Content { get; set; }
         public IList<Comment> Comments { get; set; }
-        public Guid? OwnerId { get; set; }
-        public User Owner { get; set; }
+        public Guid? AuthorId { get; set; }
+        public User Author { get; set; }
         public IList<CategoryArticle> CategoryArticles { get; set; }
         public int ViewCount { get; set; }
         public IList<ArticleOperation> ArticleOperations { get; set; }
