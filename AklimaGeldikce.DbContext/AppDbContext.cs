@@ -25,6 +25,8 @@ namespace AklimaGeldikce.DbContext
         public DbSet<AklimaGeldikce.Entities.ArticleOperation> ArticleOperation { get; set; }
         public DbSet<AklimaGeldikce.Entities.ArticleStatePath> ArticleStatePath { get; set; }
         public DbSet<AklimaGeldikce.Entities.ArticleActionRole> ArticleActionRole { get; set; }
+        public DbSet<AklimaGeldikce.Entities.Notification> Notification { get; set; }
+        public DbSet<AklimaGeldikce.Entities.Message> Message { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -108,6 +110,16 @@ namespace AklimaGeldikce.DbContext
             modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
               .HasOne(p => p.SourceArticleState)
               .WithMany(u => u.SourceArticleStatePaths)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.Message>()
+              .HasOne(p => p.From)
+              .WithMany(u => u.SentMessages)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AklimaGeldikce.Entities.Message>()
+              .HasOne(p => p.To)
+              .WithMany(u => u.ReceivedMessages)
               .OnDelete(DeleteBehavior.Restrict);
         }
     }

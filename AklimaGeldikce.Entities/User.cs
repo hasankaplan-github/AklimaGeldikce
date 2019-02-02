@@ -13,6 +13,9 @@ namespace AklimaGeldikce.Entities
             this.RoleUsers = new List<RoleUser>();
             this.Comments = new List<Comment>();
             this.ArticleOperations = new List<ArticleOperation>();
+            this.Notifications = new List<Notification>();
+            this.SentMessages = new List<Message>();
+            this.ReceivedMessages = new List<Message>();
         }
 
         public string FirstName { get; set; }
@@ -28,5 +31,8 @@ namespace AklimaGeldikce.Entities
         public DateTime? LastLogoutDate { get; set; }
         public IList<RoleUser> RoleUsers { get; set; }
         public IList<ArticleOperation> ArticleOperations { get; set; }
+        public IList<Notification> Notifications { get; set; }
+        public IList<Message> SentMessages { get; set; }
+        public IList<Message> ReceivedMessages { get; set; }
     }
 }
