@@ -22,7 +22,7 @@ namespace AklimaGeldikce.Web.ViewComponents
                 //User user = this.userService.GetById(Guid.Parse(loggedInUserId));
                 //return View("LoggedIn_AdminLte", user.Username);
 
-                return View("Default_AdminLte");
+                return View("LoggedIn_AdminLte");
             }
             return View("Default_AdminLte");
         }
