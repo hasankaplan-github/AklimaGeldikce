@@ -66,5 +66,51 @@ namespace AklimaGeldikce.Services
 
             return menu;
         }
+
+        public async Task<string> GetSidebarHtmlAsync(Guid? parentMenuItemId, IList<Role> roles)
+        {
+            string menu = "";
+
+            var roleIds = new List<Guid>(roles.Count);
+            foreach (var role in roles)
+            {
+                roleIds.Add(role.Id);
+            }
+
+            var menuItems = await base.repository.GetManyAsync(mi => mi.ParentMenuItemId == parentMenuItemId, q => q.OrderBy(e => e.Order));
+            foreach (var menuItem in menuItems)
+            {
+                var roleMenuItems = await this.roleMenuItemRepository.GetManyAsync(rmi => rmi.MenuItemId == menuItem.Id);
+                foreach (var roleMenuItem in roleMenuItems)
+                {
+                    if (roleIds.Contains(roleMenuItem.RoleId))
+                    {
+                        var childMenuItems = await base.repository.GetManyAsync(mi => mi.ParentMenuItemId == menuItem.Id);
+                        if (menuItem.ChildMenuItems != null && menuItem.ChildMenuItems.Count > 0)
+                        {
+                            menu += "<li class=\"treeview\">" +
+                                        "<a href = \"#\" >" +
+                                            "<i class=\"fa fa-share\"></i> <span>" + menuItem.Name + "</span>" +
+                                            "<span class=\"pull-right-container\">" +
+                                                "<i class=\"fa fa-angle-left pull-right\"></i>" +
+                                            "</span>" +
+                                        "</a>" +
+                                        "<ul class=\"treeview-menu\">" +
+                                            await GetSidebarHtmlAsync(menuItem.Id, roles) +
+                                        "</ul>" +
+                                    "</li>";
+                        }
+                        else
+                        {
+                            menu += "<li><a href=\"/" + menuItem.Controller + "/" + menuItem.Action + "\" ><i class=\"fa fa-circle-o\"></i>" + menuItem.Name + "</a></li>";
+                        }
+                        
+                        break;
+                    }
+                }
+            }
+
+            return menu;
+        }
     }
 }

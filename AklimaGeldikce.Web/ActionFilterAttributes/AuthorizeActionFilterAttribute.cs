@@ -27,7 +27,8 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
             string action = context.RouteData.Values["action"].ToString();
             string loggedInUserIdCookie = context.HttpContext.Request.Cookies["loggedInUserId"];
 
-            var loggedInUserId = loggedInUserIdCookie == null ? Guid.Empty : Guid.Parse(loggedInUserIdCookie);
+            var loggedInUserId = string.IsNullOrEmpty(loggedInUserIdCookie) ? Guid.Empty : Guid.Parse(loggedInUserIdCookie);
+            context.HttpContext.Response.Cookies.Append("loggedInUserId", loggedInUserId.ToString());
             var roleUsers = this.roleUserService.GetMany(ru => ru.UserId == loggedInUserId);
             var request = this.requestService.Get(r => r.Action.Equals(action) && r.Controller.Equals(controller));
             var roleRequests = request == null ? new List<RoleRequest>() : this.roleRequestService.GetMany(rr => rr.RequestId == request.Id);
@@ -54,7 +55,7 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
                 //context.HttpContext.Response.Redirect("/Account/Login");
 
                 // Prevent the action from actually being executed
-                context.Result = new RedirectResult("/Account/Login?returnUrl=\"/" + controller + "/" + action + "\"");
+                context.Result = new RedirectResult("/Account/Login?returnUrl=/" + controller + "/" + action);
             }
 
             base.OnActionExecuting(context);

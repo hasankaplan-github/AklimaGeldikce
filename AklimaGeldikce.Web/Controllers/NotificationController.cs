@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AklimaGeldikce.DbContext;
 using AklimaGeldikce.Entities;
 using AklimaGeldikce.Services;
+using AklimaGeldikce.Web.ActionFilterAttributes;
 
 namespace AklimaGeldikce.Web.Controllers
 {
+    [AuthorizeActionFilter]
     public class NotificationController : Controller
     {
         //private readonly AppDbContext _context;
@@ -34,9 +36,8 @@ namespace AklimaGeldikce.Web.Controllers
             // var appDbContext = _context.Notification.Include(n => n.To);
             //return View(await appDbContext.ToListAsync());
 
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
-            Guid loggedInUserIdGuid = Guid.Parse(loggedInUserId);
-            var notifications = await this.notificationService.GetManyAsync(x => x.ToId == loggedInUserIdGuid, x => x.OrderByDescending(y => y.NotificationDate));
+            Guid loggedInUserId = Guid.Parse(Request.Cookies["loggedInUserId"]);
+            var notifications = await this.notificationService.GetManyAsync(x => x.ToId == loggedInUserId, x => x.OrderByDescending(y => y.NotificationDate));
 
             return View(notifications);
         }
@@ -55,12 +56,17 @@ namespace AklimaGeldikce.Web.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
                 */
             var notification = this.notificationService.GetById(id);
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
-            Guid loggedInUserIdGuid = Guid.Parse(loggedInUserId);
+            Guid loggedInUserId = Guid.Parse(Request.Cookies["loggedInUserId"]);
 
-            if (notification == null || notification.ToId != loggedInUserIdGuid)
+            if (notification == null || notification.ToId != loggedInUserId)
             {
                 return NotFound();
+            }
+
+            if (notification.IsRead == false)
+            {
+                notification.IsRead = true;
+                this.notificationService.Update(notification);
             }
 
             return View(notification);

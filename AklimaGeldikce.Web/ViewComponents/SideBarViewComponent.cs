@@ -10,31 +10,25 @@ namespace AklimaGeldikce.Web.ViewComponents
 {
     public class SideBarViewComponent : ViewComponent
     {
-        private readonly IUserService userService;
+        private readonly IRoleService roleService;
+        private readonly IMenuItemService menuItemService;
 
-        public SideBarViewComponent(IUserService userService)
+        public SideBarViewComponent(IRoleService roleService, IMenuItemService menuItemService)
         {
-            this.userService = userService;
+            this.roleService = roleService;
+            this.menuItemService = menuItemService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
-            if (IsLoggedIn(loggedInUserId))
+            string dynamicNavbarCookie = Request.Cookies["dynamicNavbar"];
+            if (string.IsNullOrEmpty(dynamicNavbarCookie))
             {
-                User user = this.userService.GetById(Guid.Parse(loggedInUserId));
-                return View("Default_AdminLte", user.Username);
+                var roles = await this.roleService.GetManyAsync(r => r.Name == "Guest");
+                dynamicNavbarCookie = await this.menuItemService.GetSidebarHtmlAsync(null, roles);
+                HttpContext.Response.Cookies.Append("dynamicNavbar", dynamicNavbarCookie);
             }
-            return View("Default_AdminLte");
-        }
-
-        private bool IsLoggedIn(string loggedInUserId)
-        {
-            if (string.IsNullOrEmpty(loggedInUserId) || loggedInUserId.Equals(Guid.Empty.ToString()))
-            {
-                return false;
-            }
-            return true;
+            return View("Default_AdminLte", dynamicNavbarCookie);
         }
     }
 }

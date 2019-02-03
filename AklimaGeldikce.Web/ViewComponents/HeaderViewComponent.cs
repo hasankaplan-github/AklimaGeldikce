@@ -24,7 +24,7 @@ namespace AklimaGeldikce.Web.Controllers
             if (string.IsNullOrEmpty(dynamicNavbarCookie))
             {
                 var roles = await this.roleService.GetManyAsync(r => r.Name == "Guest");
-                dynamicNavbarCookie = await this.menuItemService.GetNavbarHtmlAsync(null, roles, false);
+                dynamicNavbarCookie = await this.menuItemService.GetSidebarHtmlAsync(null, roles);
                 HttpContext.Response.Cookies.Append("dynamicNavbar", dynamicNavbarCookie);
             }
             return View("Default_AdminLte", dynamicNavbarCookie);
