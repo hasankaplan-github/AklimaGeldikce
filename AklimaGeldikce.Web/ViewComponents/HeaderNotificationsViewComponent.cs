@@ -1,17 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AklimaGeldikce.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AklimaGeldikce.Entities;
 
 namespace AklimaGeldikce.Web.ViewComponents
 {
     public class HeaderNotificationsViewComponent : ViewComponent
     {
+        private readonly INotificationService notificationService;
         
-        public HeaderNotificationsViewComponent()
+        public HeaderNotificationsViewComponent(INotificationService notificationService)
         {
-           
+            this.notificationService = notificationService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -19,10 +22,9 @@ namespace AklimaGeldikce.Web.ViewComponents
             string loggedInUserId = Request.Cookies["loggedInUserId"];
             if (IsLoggedIn(loggedInUserId))
             {
-                //User user = this.userService.GetById(Guid.Parse(loggedInUserId));
-                //return View("LoggedIn_AdminLte", user.Username);
+                var notifications = await this.notificationService.GetManyAsync(x => x.ToId == Guid.Parse(loggedInUserId) && x.IsRead == false, x => x.OrderByDescending(y => y.NotificationDate));
 
-                return View("LoggedIn_AdminLte");
+                return View("LoggedIn_AdminLte", notifications);
             }
             return View("Default_AdminLte");
         }
