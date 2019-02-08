@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AklimaGeldikce.Entities
 {
-    public class ArticleStatePath : BaseEntity
+    public class ArticleStateTransition : BaseEntity
     {
         public Guid? SourceArticleStateId { get; set; }
         public ArticleState SourceArticleState { get; set; }

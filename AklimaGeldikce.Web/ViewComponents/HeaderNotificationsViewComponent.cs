@@ -22,9 +22,9 @@ namespace AklimaGeldikce.Web.ViewComponents
             string loggedInUserId = Request.Cookies["loggedInUserId"];
             if (IsLoggedIn(loggedInUserId))
             {
-                var notifications = await this.notificationService.GetManyAsync(x => x.ToId == Guid.Parse(loggedInUserId) && x.IsRead == false, x => x.OrderByDescending(y => y.NotificationDate));
+                var unreadNotifications = await this.notificationService.GetManyAsync(x => x.ToId == Guid.Parse(loggedInUserId) && x.IsRead == false, x => x.OrderByDescending(y => y.NotificationDate));
 
-                return View("LoggedIn_AdminLte", notifications);
+                return View("LoggedIn_AdminLte", unreadNotifications);
             }
             return View("Default_AdminLte");
         }

@@ -8,13 +8,13 @@ namespace AklimaGeldikce.Entities
     {
         public ArticleState()
         {
-            SourceArticleStatePaths = new List<ArticleStatePath>();
-            DestinationArticleStatePaths = new List<ArticleStatePath>();
+            SourceArticleStateTransitions = new List<ArticleStateTransition>();
+            DestinationArticleStateTransitions = new List<ArticleStateTransition>();
         }
 
         public string CodeName { get; set; }
         public string Description { get; set; }
-        public IList<ArticleStatePath> SourceArticleStatePaths { get; set; }
-        public IList<ArticleStatePath> DestinationArticleStatePaths { get; set; }
+        public IList<ArticleStateTransition> SourceArticleStateTransitions { get; set; }
+        public IList<ArticleStateTransition> DestinationArticleStateTransitions { get; set; }
     }
 }

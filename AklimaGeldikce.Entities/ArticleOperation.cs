@@ -8,8 +8,8 @@ namespace AklimaGeldikce.Entities
     {
         public Guid ArticleId { get; set; }
         public Article Article { get; set; }
-        public Guid ArticleStatePathId { get; set; }
-        public ArticleStatePath ArticleStatePath { get; set; }
+        public Guid ArticleStateTransitionId { get; set; }
+        public ArticleStateTransition ArticleStateTransition { get; set; }
         public DateTime OperationDate { get; set; }
         public Guid? OperatorUserId { get; set; }
         public User OperatorUser { get; set; }

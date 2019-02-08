@@ -23,7 +23,7 @@ namespace AklimaGeldikce.DbContext
         public DbSet<AklimaGeldikce.Entities.ArticleState> ArticleState { get; set; }
         public DbSet<AklimaGeldikce.Entities.ArticleAction> ArticleAction { get; set; }
         public DbSet<AklimaGeldikce.Entities.ArticleOperation> ArticleOperation { get; set; }
-        public DbSet<AklimaGeldikce.Entities.ArticleStatePath> ArticleStatePath { get; set; }
+        public DbSet<AklimaGeldikce.Entities.ArticleStateTransition> ArticleStateTransition { get; set; }
         public DbSet<AklimaGeldikce.Entities.ArticleActionRole> ArticleActionRole { get; set; }
         public DbSet<AklimaGeldikce.Entities.Notification> Notification { get; set; }
         public DbSet<AklimaGeldikce.Entities.Message> Message { get; set; }
@@ -97,19 +97,19 @@ namespace AklimaGeldikce.DbContext
                 .WithMany(u => u.ArticleOperations)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStateTransition>()
                .HasOne(p => p.ArticleAction)
-               .WithMany(u => u.ArticleStatePaths)
+               .WithMany(u => u.ArticleStateTransitions)
                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStateTransition>()
               .HasOne(p => p.DestinationArticleState)
-              .WithMany(u => u.DestinationArticleStatePaths)
+              .WithMany(u => u.DestinationArticleStateTransitions)
               .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStatePath>()
+            modelBuilder.Entity<AklimaGeldikce.Entities.ArticleStateTransition>()
               .HasOne(p => p.SourceArticleState)
-              .WithMany(u => u.SourceArticleStatePaths)
+              .WithMany(u => u.SourceArticleStateTransitions)
               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AklimaGeldikce.Entities.Message>()
