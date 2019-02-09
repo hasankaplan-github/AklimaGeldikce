@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AklimaGeldikce.Entities;
+using AklimaGeldikce.Web.Code;
 
 namespace AklimaGeldikce.Web.ViewComponents
 {
@@ -19,7 +20,7 @@ namespace AklimaGeldikce.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
+            string loggedInUserId = Request.Cookies[CookieKeys.LoggedInUserId];
             if (IsLoggedIn(loggedInUserId))
             {
                 var unreadNotifications = await this.notificationService.GetManyAsync(x => x.ToId == Guid.Parse(loggedInUserId) && x.IsRead == false, x => x.OrderByDescending(y => y.NotificationDate));

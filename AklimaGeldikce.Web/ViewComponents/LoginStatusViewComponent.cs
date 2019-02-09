@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AklimaGeldikce.Entities;
 using AklimaGeldikce.Services;
+using AklimaGeldikce.Web.Code;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AklimaGeldikce.Web.ViewComponents
@@ -19,7 +20,7 @@ namespace AklimaGeldikce.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
+            string loggedInUserId = Request.Cookies[CookieKeys.LoggedInUserId];
             if (IsLoggedIn(loggedInUserId))
             {
                 User user = this.userService.GetById(Guid.Parse(loggedInUserId));

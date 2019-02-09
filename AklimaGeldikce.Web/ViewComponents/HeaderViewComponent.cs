@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AklimaGeldikce.Services;
+using AklimaGeldikce.Web.Code;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AklimaGeldikce.Web.Controllers
@@ -20,14 +21,14 @@ namespace AklimaGeldikce.Web.Controllers
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            string dynamicNavbarCookie = Request.Cookies["dynamicNavbar"];
-            if (string.IsNullOrEmpty(dynamicNavbarCookie))
+            string dynamicSidebarCookie = Request.Cookies[CookieKeys.DynamicSideBar];
+            if (string.IsNullOrEmpty(dynamicSidebarCookie))
             {
                 var roles = await this.roleService.GetManyAsync(r => r.Name == "Guest");
-                dynamicNavbarCookie = await this.menuItemService.GetSidebarHtmlAsync(null, roles);
-                HttpContext.Response.Cookies.Append("dynamicNavbar", dynamicNavbarCookie);
+                dynamicSidebarCookie = await this.menuItemService.GetSidebarHtmlAsync(null, roles);
+                HttpContext.Response.Cookies.Append(CookieKeys.DynamicSideBar, dynamicSidebarCookie);
             }
-            return View("Default_AdminLte", dynamicNavbarCookie);
+            return View("Default_AdminLte", dynamicSidebarCookie);
         }
     }
 }

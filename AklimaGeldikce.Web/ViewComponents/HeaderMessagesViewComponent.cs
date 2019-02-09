@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AklimaGeldikce.Web.Code;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace AklimaGeldikce.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
+            string loggedInUserId = Request.Cookies[CookieKeys.LoggedInUserId];
             if (IsLoggedIn(loggedInUserId))
             {
                 //User user = this.userService.GetById(Guid.Parse(loggedInUserId));

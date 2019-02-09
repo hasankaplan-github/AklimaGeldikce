@@ -9,6 +9,7 @@ using AklimaGeldikce.DbContext;
 using AklimaGeldikce.Entities;
 using AklimaGeldikce.Services;
 using AklimaGeldikce.Web.ActionFilterAttributes;
+using AklimaGeldikce.Web.Code;
 
 namespace AklimaGeldikce.Web.Controllers
 {
@@ -36,7 +37,7 @@ namespace AklimaGeldikce.Web.Controllers
             // var appDbContext = _context.Notification.Include(n => n.To);
             //return View(await appDbContext.ToListAsync());
 
-            Guid loggedInUserId = Guid.Parse(Request.Cookies["loggedInUserId"]);
+            Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
             var notifications = await this.notificationService.GetManyAsync(x => x.ToId == loggedInUserId, x => x.OrderByDescending(y => y.NotificationDate));
 
             return View(notifications);
@@ -56,7 +57,7 @@ namespace AklimaGeldikce.Web.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
                 */
             var notification = this.notificationService.GetById(id);
-            Guid loggedInUserId = Guid.Parse(Request.Cookies["loggedInUserId"]);
+            Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
 
             if (notification == null || notification.ToId != loggedInUserId)
             {

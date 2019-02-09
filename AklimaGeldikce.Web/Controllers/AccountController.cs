@@ -11,6 +11,7 @@ using AklimaGeldikce.Web.Models;
 using AklimaGeldikce.Services;
 using Microsoft.AspNetCore.Http;
 using AklimaGeldikce.Web.ActionFilterAttributes;
+using AklimaGeldikce.Web.Code;
 
 namespace AklimaGeldikce.Web.Controllers
 {
@@ -57,9 +58,9 @@ namespace AklimaGeldikce.Web.Controllers
                 user.LastLoginDate = DateTime.Now;
                 this.userService.Update(user);
 
-                Response.Cookies.Append("loggedInUserId", user.Id.ToString());
-                Response.Cookies.Append("loggedInRoleNames", roleNames);
-                Response.Cookies.Append("dynamicNavbar", await this.menuItemService.GetSidebarHtmlAsync(null, roles));
+                Response.Cookies.Append(CookieKeys.LoggedInUserId, user.Id.ToString());
+                //Response.Cookies.Append("loggedInRoleNames", roleNames);
+                Response.Cookies.Append(CookieKeys.DynamicSideBar, await this.menuItemService.GetSidebarHtmlAsync(null, roles));
                 //return RedirectToAction("ProductList", "Product");
                 if (string.IsNullOrEmpty(returnUrl) == false)
                     return Redirect(returnUrl);
@@ -73,7 +74,7 @@ namespace AklimaGeldikce.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            string loggedInUserId = Request.Cookies["loggedInUserId"];
+            string loggedInUserId = Request.Cookies[CookieKeys.LoggedInUserId];
             User user = this.userService.GetById(Guid.Parse(loggedInUserId));
             if(user!=null)
             {
@@ -82,9 +83,9 @@ namespace AklimaGeldikce.Web.Controllers
                 this.userService.Update(user);
             }
 
-            Response.Cookies.Append("loggedInUserId", Guid.Empty.ToString());
-            Response.Cookies.Append("loggedInRoleNames", "Guest");
-            Response.Cookies.Append("dynamicNavbar", "");
+            Response.Cookies.Append(CookieKeys.LoggedInUserId, Guid.Empty.ToString());
+            //Response.Cookies.Append("loggedInRoleNames", "Guest");
+            Response.Cookies.Append(CookieKeys.DynamicSideBar, "");
 
             return RedirectToAction("Index", "Home");
         }
@@ -301,6 +302,43 @@ namespace AklimaGeldikce.Web.Controllers
             return Json(new { RoleNames = roleNames });
         }
 
+        public async Task<IActionResult> MyProfile()
+        {
+            Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
+            User user = this.userService.GetById(loggedInUserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            MyProfileViewModel myProfileViewModel = new MyProfileViewModel
+            {
+                FirstName = user.FirstName,
+                SecondName = user.SecondName,
+                Email = user.Email,
+                Password = user.Password,
+                PasswordAgain = user.Password,
+                Username = user.Username
+            };
+            return View(myProfileViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateMyProfile([Bind("FirstName,SecondName,Username,Password,PasswordAgain,Email")] MyProfileViewModel myProfileViewModel)
+        {
+            Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
+            User user = this.userService.GetById(loggedInUserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            user.FirstName = myProfileViewModel.FirstName;
+            user.SecondName = myProfileViewModel.SecondName;
+            user.Password = myProfileViewModel.Password;
+            user.Email = myProfileViewModel.Email;
+            user.Username = myProfileViewModel.Username;
+            this.userService.Update(user);
+            return View("MyProfile", myProfileViewModel);
+        }
 
     }
 }

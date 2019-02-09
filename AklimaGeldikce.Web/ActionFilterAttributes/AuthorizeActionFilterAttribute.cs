@@ -1,5 +1,6 @@
 ﻿using AklimaGeldikce.Entities;
 using AklimaGeldikce.Services;
+using AklimaGeldikce.Web.Code;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -25,10 +26,10 @@ namespace AklimaGeldikce.Web.ActionFilterAttributes
 
             string controller = context.RouteData.Values["controller"].ToString();
             string action = context.RouteData.Values["action"].ToString();
-            string loggedInUserIdCookie = context.HttpContext.Request.Cookies["loggedInUserId"];
+            string loggedInUserIdCookie = context.HttpContext.Request.Cookies[CookieKeys.LoggedInUserId];
 
             var loggedInUserId = string.IsNullOrEmpty(loggedInUserIdCookie) ? Guid.Empty : Guid.Parse(loggedInUserIdCookie);
-            context.HttpContext.Response.Cookies.Append("loggedInUserId", loggedInUserId.ToString());
+            context.HttpContext.Response.Cookies.Append(CookieKeys.LoggedInUserId, loggedInUserId.ToString());
             var roleUsers = this.roleUserService.GetMany(ru => ru.UserId == loggedInUserId);
             var request = this.requestService.Get(r => r.Action.Equals(action) && r.Controller.Equals(controller));
             var roleRequests = request == null ? new List<RoleRequest>() : this.roleRequestService.GetMany(rr => rr.RequestId == request.Id);
