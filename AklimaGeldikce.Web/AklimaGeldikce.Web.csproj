@@ -37,6 +37,9 @@
     <Content Update="Views\Shared\Components\LoginStatus\LoggedIn_AdminLte.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Shared\Components\MyProfileUserInfo\Default_AdminLte.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

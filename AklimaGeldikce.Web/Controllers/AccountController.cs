@@ -304,40 +304,39 @@ namespace AklimaGeldikce.Web.Controllers
 
         public async Task<IActionResult> MyProfile()
         {
-            Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
-            User user = this.userService.GetById(loggedInUserId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            MyProfileViewModel myProfileViewModel = new MyProfileViewModel
-            {
-                FirstName = user.FirstName,
-                SecondName = user.SecondName,
-                Email = user.Email,
-                Password = user.Password,
-                PasswordAgain = user.Password,
-                Username = user.Username
-            };
-            return View(myProfileViewModel);
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateMyProfile([Bind("FirstName,SecondName,Username,Password,PasswordAgain,Email")] MyProfileViewModel myProfileViewModel)
+        public async Task<JsonResult> UpdateInfo(MyProfileUserInfoViewModel myProfileInfoViewModel)
         {
             Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
             User user = this.userService.GetById(loggedInUserId);
-            if (user == null)
+            if (user == null || user.Password.Equals(myProfileInfoViewModel.Password) == false)
             {
-                return NotFound();
+                return Json(new { Status = "failure" });
             }
-            user.FirstName = myProfileViewModel.FirstName;
-            user.SecondName = myProfileViewModel.SecondName;
-            user.Password = myProfileViewModel.Password;
-            user.Email = myProfileViewModel.Email;
-            user.Username = myProfileViewModel.Username;
+            user.FirstName = myProfileInfoViewModel.FirstName;
+            user.SecondName = myProfileInfoViewModel.SecondName;
+            //user.Password = myProfileInfoViewModel.Password;
+            user.Email = myProfileInfoViewModel.Email;
+            user.Username = myProfileInfoViewModel.Username;
             this.userService.Update(user);
-            return View("MyProfile", myProfileViewModel);
+            return Json(new { Status = "success" });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ChangePassword(MyProfilePasswordChangeViewModel myProfilePasswordChangeViewModel)
+        {
+            Guid loggedInUserId = Guid.Parse(Request.Cookies[CookieKeys.LoggedInUserId]);
+            User user = this.userService.GetById(loggedInUserId);
+            if (user == null || user.Password.Equals(myProfilePasswordChangeViewModel.CurrentPassword) == false || myProfilePasswordChangeViewModel.NewPassword.Equals(myProfilePasswordChangeViewModel.NewPasswordAgain) == false)
+            {
+                return Json(new { Status = "failure" });
+            }
+            user.Password = myProfilePasswordChangeViewModel.NewPassword;
+            this.userService.Update(user);
+            return Json(new { Status = "success" });
         }
 
     }

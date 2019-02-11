@@ -1,0 +1,122 @@
+﻿@model AklimaGeldikce.Web.Models.MyProfilePasswordChangeViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<div class="row">
+    <div class="col-md-4">
+        @*<form asp-controller="Account" asp-action="UpdateMyProfile">*@
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="NewPassword" class="control-label"></label>
+            <input asp-for="NewPassword" class="form-control" type="password" />
+            <span asp-validation-for="NewPassword" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NewPasswordAgain" class="control-label"></label>
+            <input asp-for="NewPasswordAgain" class="form-control" type="password" />
+            <span asp-validation-for="NewPasswordAgain" class="text-danger"></span>
+        </div>
+
+        @*
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsLoggedIn" /> @Html.DisplayNameFor(model => model.IsLoggedIn)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastLoginDate" class="control-label"></label>
+                <input asp-for="LastLoginDate" class="form-control" />
+                <span asp-validation-for="LastLoginDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastLogoutDate" class="control-label"></label>
+                <input asp-for="LastLogoutDate" class="form-control" />
+                <span asp-validation-for="LastLogoutDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                    </label>
+                </div>
+            </div>
+                        <input type="hidden" asp-for="Id" />s
+        *@
+
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-password-change-input-password">
+                Şifremi Değiştir
+            </button>
+        </div>
+        @*</form>*@
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-password-change-input-password">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Şifrenizi Giriniz</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label asp-for="CurrentPassword" class="control-label"></label>
+                    <input asp-for="CurrentPassword" class="form-control" type="password" />
+                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">İptal</button>
+                <button id="change-password-button" type="button" class="btn btn-primary" data-dismiss="modal">Güncelle</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#change-password-button").click(function () {
+                myProfilePasswordChangeViewModel = new Object();
+                myProfilePasswordChangeViewModel.CurrentPassword = $("#CurrentPassword").val();
+                myProfilePasswordChangeViewModel.NewPassword = $("#NewPassword").val();
+                myProfilePasswordChangeViewModel.NewPasswordAgain = $("#NewPasswordAgain").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ChangePassword", "Account")',
+                    cache: false,
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { myProfilePasswordChangeViewModel: myProfilePasswordChangeViewModel},
+                    success: function (response) {
+                        if (response.status == "success") {
+                            alert("Şifreniz başarıyla değiştirildi.");
+                        }
+                        else {
+                            alert("Şifreniz değiştirilirken hata oluştu!");
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+
+                $("#CurrentPassword").val('');
+            });
+        })
+    </script>
+}

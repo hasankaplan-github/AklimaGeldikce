@@ -1,83 +1,39 @@
-﻿@model MyProfileViewModel
+﻿@*@model MyProfileUserInfoViewModel*@
 
 @{
     //Layout = null;
 }
 
-    <h4>User</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-controller="Account" asp-action="UpdateMyProfile">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="FirstName" class="control-label"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="SecondName" class="control-label"></label>
-                    <input asp-for="SecondName" class="form-control" />
-                    <span asp-validation-for="SecondName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Username" class="control-label"></label>
-                    <input asp-for="Username" class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PasswordAgain" class="control-label"></label>
-                    <input asp-for="PasswordAgain" class="form-control" />
-                    <span asp-validation-for="PasswordAgain" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                @*
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input asp-for="IsLoggedIn" /> @Html.DisplayNameFor(model => model.IsLoggedIn)
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastLoginDate" class="control-label"></label>
-            <input asp-for="LastLoginDate" class="form-control" />
-            <span asp-validation-for="LastLoginDate" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastLogoutDate" class="control-label"></label>
-            <input asp-for="LastLogoutDate" class="form-control" />
-            <span asp-validation-for="LastLogoutDate" class="text-danger"></span>
-        </div>
+<h4>User</h4>
+<hr />
 
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
+        <li><a href="#user-info" data-toggle="tab">Kullanıcı Bilgileri</a></li>
+        <li><a href="#password-change" data-toggle="tab">Şifre Değiştirme</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="activity">
+            @await Component.InvokeAsync("MyProfileActivity")
         </div>
-                    <input type="hidden" asp-for="Id" />s
-                *@
-
-                <div class="form-group">
-                    <input type="submit" value="Güncelle" class="btn btn-default" />
-                </div>
-            </form>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="user-info">
+            @await Component.InvokeAsync("MyProfileUserInfo")
         </div>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="password-change">
+            @await Component.InvokeAsync("MyProfilePasswordChange")
+        </div>
+        <!-- /.tab-pane -->
     </div>
+    <!-- /.tab-content -->
+</div>
+<!-- /.nav-tabs-custom -->
 
-    @*
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
-    *@
+
+
+
+
+
+
