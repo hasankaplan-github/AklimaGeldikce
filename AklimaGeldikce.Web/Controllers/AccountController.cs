@@ -22,13 +22,15 @@ namespace AklimaGeldikce.Web.Controllers
         private readonly IRoleUserService roleUserService;
         private readonly IRoleService roleService;
         private readonly IMenuItemService menuItemService;
+        private readonly IForgotPasswordService forgotPasswordService;
 
-        public AccountController(IUserService userService, IRoleUserService roleUserService, IRoleService roleService, IMenuItemService menuItemService)
+        public AccountController(IUserService userService, IRoleUserService roleUserService, IRoleService roleService, IMenuItemService menuItemService, IForgotPasswordService forgotPasswordService)
         {
             this.userService = userService;
             this.roleUserService = roleUserService;
             this.roleService = roleService;
             this.menuItemService = menuItemService;
+            this.forgotPasswordService = forgotPasswordService;
         }
 
         // GET: Account
@@ -339,5 +341,28 @@ namespace AklimaGeldikce.Web.Controllers
             return Json(new { Status = "success" });
         }
 
+        public async Task<ActionResult> ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ForgotPassword(string username)
+        {
+            var user = this.userService.Get(x => x.Username.Equals(username));
+            if (user != null)
+            {
+                var forgotPassword = new ForgotPassword
+                {
+                    UserId = user.Id,
+                    IsUsed = false,
+                    ExpiresOn = DateTime.Now.AddHours(1)
+                };
+                this.forgotPasswordService.Create(forgotPassword);
+                // send email /Account/ForgotPassword/Id
+            }
+
+            return View();
+        }
     }
 }

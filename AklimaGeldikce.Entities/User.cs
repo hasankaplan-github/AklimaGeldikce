@@ -16,6 +16,7 @@ namespace AklimaGeldikce.Entities
             this.Notifications = new List<Notification>();
             this.SentMessages = new List<Message>();
             this.ReceivedMessages = new List<Message>();
+            this.ForgotPasswords = new List<ForgotPassword>();
         }
 
         public string FirstName { get; set; }
@@ -34,5 +35,6 @@ namespace AklimaGeldikce.Entities
         public IList<Notification> Notifications { get; set; }
         public IList<Message> SentMessages { get; set; }
         public IList<Message> ReceivedMessages { get; set; }
+        public IList<ForgotPassword> ForgotPasswords { get; set; }
     }
 }
