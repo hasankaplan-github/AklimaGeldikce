@@ -12,6 +12,7 @@ using AklimaGeldikce.Services;
 using Microsoft.AspNetCore.Http;
 using AklimaGeldikce.Web.ActionFilterAttributes;
 using AklimaGeldikce.Web.Code;
+using AklimaGeldikce.Web.Services;
 
 namespace AklimaGeldikce.Web.Controllers
 {
@@ -23,14 +24,16 @@ namespace AklimaGeldikce.Web.Controllers
         private readonly IRoleService roleService;
         private readonly IMenuItemService menuItemService;
         private readonly IForgotPasswordService forgotPasswordService;
+        private readonly IEmailService emailService;
 
-        public AccountController(IUserService userService, IRoleUserService roleUserService, IRoleService roleService, IMenuItemService menuItemService, IForgotPasswordService forgotPasswordService)
+        public AccountController(IUserService userService, IRoleUserService roleUserService, IRoleService roleService, IMenuItemService menuItemService, IForgotPasswordService forgotPasswordService, IEmailService emailService)
         {
             this.userService = userService;
             this.roleUserService = roleUserService;
             this.roleService = roleService;
             this.menuItemService = menuItemService;
             this.forgotPasswordService = forgotPasswordService;
+            this.emailService = emailService;
         }
 
         // GET: Account
@@ -360,6 +363,22 @@ namespace AklimaGeldikce.Web.Controllers
                 };
                 this.forgotPasswordService.Create(forgotPassword);
                 // send email /Account/ForgotPassword/Id
+                EmailMessage emailMessage = new EmailMessage
+                {
+                    From = new EmailAddress { Address = "hasan.kaplan.me@gmail.com", Name = "Hasan Kaplan" },
+                    Subject = "Aklima Geldikçe - Şifre Kurtarma",
+                    Body = "</br></br>Merhaba, </br>Aşağıdaki linke tıklayarak şifre kurtarma işlemini uygulayabilirsiniz.</br>" +
+                            "<a href='www.aklimageldikce.com/Account/ForgotPassword/" + forgotPassword.Id.ToString() + "'></a></br>" +
+                            "İyi günler dileriz."
+                };
+                emailMessage.To.Add(new EmailAddress { Address = user.Email, Name = user.FirstName + " " + user.SecondName });
+                try
+                {
+                    await this.emailService.SendEmailAsync(emailMessage);
+                }
+                catch (Exception)
+                {
+                }
             }
 
             return View();

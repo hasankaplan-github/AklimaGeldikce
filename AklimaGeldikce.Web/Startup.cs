@@ -1,6 +1,7 @@
 ﻿using AklimaGeldikce.DbContext;
 using AklimaGeldikce.Repositories.UnitOfWork;
 using AklimaGeldikce.Services;
+using AklimaGeldikce.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,7 @@ namespace AklimaGeldikce.Web
             services.AddTransient<IRoleRequestService, RoleRequestService>();
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IEmailService, EmailService>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
