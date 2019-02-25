@@ -350,8 +350,9 @@ namespace AklimaGeldikce.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ForgotPassword(string username)
+        public async Task<JsonResult> SendRenewPasswordEmail(string username)
         {
+            JsonResult jsonResult = null;
             var user = this.userService.Get(x => x.Username.Equals(username));
             if (user != null)
             {
@@ -363,25 +364,32 @@ namespace AklimaGeldikce.Web.Controllers
                 };
                 this.forgotPasswordService.Create(forgotPassword);
                 // send email /Account/ForgotPassword/Id
+                string linkText = "www.aklimageldikce.com/Account/ForgotPassword/" + forgotPassword.Id.ToString();
                 EmailMessage emailMessage = new EmailMessage
                 {
                     From = new EmailAddress { Address = "hasan.kaplan.me@gmail.com", Name = "Hasan Kaplan" },
-                    Subject = "Aklima Geldikçe - Şifre Kurtarma",
-                    Body = "</br></br>Merhaba, </br>Aşağıdaki linke tıklayarak şifre kurtarma işlemini uygulayabilirsiniz.</br>" +
-                            "<a href='www.aklimageldikce.com/Account/ForgotPassword/" + forgotPassword.Id.ToString() + "'></a></br>" +
+                    Subject = "Aklima Geldikçe - Şifre Yenileme",
+                    Body = "</br></br>Merhaba, </br>Aşağıdaki linke tıklayarak şifre yenileme işlemini uygulayabilirsiniz.</br>" +
+                            "<a href='" + linkText + "'>" + linkText + "</a></br>" +
                             "İyi günler dileriz."
                 };
                 emailMessage.To.Add(new EmailAddress { Address = user.Email, Name = user.FirstName + " " + user.SecondName });
                 try
                 {
                     await this.emailService.SendEmailAsync(emailMessage);
+                    jsonResult = Json(new { Status = "success", Message = "Sistemde kayıtlı eposta adresinize şifre yenileme epostası gönderildi." });
                 }
                 catch (Exception)
                 {
+                    jsonResult = Json(new { Status = "error", Message = "Hata oluştu, lütfen tekrar deneyin." });
                 }
             }
+            else
+            {
+                jsonResult = Json(new { Status = "error", Message = "Sistemde kayıtlı kullanıcı bulunamadı." });
+            }
 
-            return View();
+            return jsonResult;
         }
     }
 }

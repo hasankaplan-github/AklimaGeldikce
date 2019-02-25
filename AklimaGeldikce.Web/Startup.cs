@@ -44,6 +44,7 @@ namespace AklimaGeldikce.Web
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IForgotPasswordService, ForgotPasswordService>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
