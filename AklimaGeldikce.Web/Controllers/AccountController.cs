@@ -364,7 +364,7 @@ namespace AklimaGeldikce.Web.Controllers
                 };
                 this.forgotPasswordService.Create(forgotPassword);
                 // send email /Account/ForgotPassword/Id
-                string linkText = "www.aklimageldikce.com/Account/ForgotPassword/" + forgotPassword.Id.ToString();
+                string linkText = "www.aklimageldikce.com/Account/RenewPassword/" + forgotPassword.Id.ToString();
                 EmailMessage emailMessage = new EmailMessage
                 {
                     From = new EmailAddress { Address = "hasan.kaplan.me@gmail.com", Name = "Hasan Kaplan" },
@@ -401,7 +401,7 @@ namespace AklimaGeldikce.Web.Controllers
             }
             else
             {
-                ViewBag.NoForgotPasswordRecord = false;
+                ViewBag.IdIsInvalid = false;
                 if (forgotPassword.IsUsed == true)
                 {
                     ViewBag.IsUsed = true;
@@ -443,6 +443,10 @@ namespace AklimaGeldikce.Web.Controllers
                 {
                     ViewBag.IdIsInvalid = true;
                 }
+            }
+            else
+            {
+                ViewBag.PasswordsAreNotEqual = true;
             }
 
             return View();
