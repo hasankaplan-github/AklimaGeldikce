@@ -391,5 +391,61 @@ namespace AklimaGeldikce.Web.Controllers
 
             return jsonResult;
         }
+
+        public async Task<ActionResult> RenewPassword(Guid id)
+        {
+            var forgotPassword = this.forgotPasswordService.GetById(id);
+            if (forgotPassword == null)
+            {
+                ViewBag.IdIsInvalid = true;
+            }
+            else
+            {
+                ViewBag.NoForgotPasswordRecord = false;
+                if (forgotPassword.IsUsed == true)
+                {
+                    ViewBag.IsUsed = true;
+                }
+                else
+                {
+                    ViewBag.IsUsed = false;
+                    if (forgotPassword.ExpiresOn < DateTime.Now)
+                    {
+                        ViewBag.IsExpired = true;
+                    }
+                    else
+                    {
+                        ViewBag.IsExpired = false;
+                        ViewBag.Id = id;
+                    }
+                }
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RenewPassword(ForgotPasswordViewModel forgotPasswordViewModel)
+        {
+            if (forgotPasswordViewModel.Password.Equals(forgotPasswordViewModel.PasswordAgain))
+            {
+                var forgotPassword = this.forgotPasswordService.GetById(forgotPasswordViewModel.Id);
+                var user = this.userService.GetById(forgotPassword.UserId);
+                if (user != null)
+                {
+                    user.Password = forgotPasswordViewModel.Password;
+                    this.userService.Update(user);
+                    forgotPassword.IsUsed = true;
+                    this.forgotPasswordService.Update(forgotPassword);
+                    ViewBag.OperationIsSucceeded = true;
+                }
+                else
+                {
+                    ViewBag.IdIsInvalid = true;
+                }
+            }
+
+            return View();
+        }
     }
 }

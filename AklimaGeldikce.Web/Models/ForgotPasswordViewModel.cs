@@ -7,5 +7,8 @@ namespace AklimaGeldikce.Web.Models
 {
     public class ForgotPasswordViewModel
     {
+        public Guid Id { get; set; }
+        public string Password { get; set; }
+        public string PasswordAgain { get; set; }
     }
 }
