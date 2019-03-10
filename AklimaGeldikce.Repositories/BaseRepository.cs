@@ -15,18 +15,15 @@ namespace AklimaGeldikce.Repositories
     /// Bu şekilde tasarlamamızın ana sebebi ise veritabanına independent(bağımsız) bir durumda kalabilmek. Örneğin MongoDB için ise ilgili provider'ı aracılığı ile MongoDBRepository tasarlayabiliriz.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class Repository<TEntity> : IRepository<TEntity> 
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
         where TEntity : BaseEntity
     {
-        private readonly Microsoft.EntityFrameworkCore.DbContext dbContext;
+        protected readonly Microsoft.EntityFrameworkCore.DbContext dbContext;
         private readonly DbSet<TEntity> dbSet;
 
-        public Repository(AppDbContext appDbContext)
+        public BaseRepository(AppDbContext appDbContext)
         {
-            if (appDbContext == null)
-                throw new ArgumentNullException("dbContext can not be null.");
-
-            this.dbContext = appDbContext;
+            this.dbContext = appDbContext ?? throw new ArgumentNullException("dbContext can not be null.");
             this.dbSet = appDbContext.Set<TEntity>();
         }
 
@@ -383,6 +380,16 @@ namespace AklimaGeldikce.Repositories
                 query = orderBy(query);
             }
             return await this.GetPagedListAsync(query, pageIndex, pageSize);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await this.dbSet.CountAsync(predicate);
+        }
+
+        public int Count(Expression<Func<TEntity, bool>> predicate)
+        {
+            return this.dbSet.Count(predicate);
         }
         #endregion
     }

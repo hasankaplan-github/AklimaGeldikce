@@ -7,7 +7,7 @@ namespace AklimaGeldikce.Repositories.UnitOfWork
     {
         //AppDbContext appDbContext { get; set; }
 
-        IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity;
+        IBaseRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity;
         int SaveChanges();
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AklimaGeldikce.Repositories
 {
-    public interface IRepository<TEntity> where TEntity : BaseEntity
+    public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         // Marks an entity as new
         void Add(TEntity entity);
@@ -57,5 +57,8 @@ namespace AklimaGeldikce.Repositories
         Task<PagedList<TEntity>> GetAllAsync(int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
         Task<IList<TEntity>> GetAllDeletedAsync(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
         Task<PagedList<TEntity>> GetAllDeletedAsync(int pageIndex, int pageSize, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
+
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
+        int Count(Expression<Func<TEntity, bool>> predicate);
     }
 }

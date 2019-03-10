@@ -11,10 +11,10 @@ namespace AklimaGeldikce.Services
 {
     public class UserService :BaseService<User>, IUserService
     {
-        private readonly IRepository<RoleUser> roleUserRepository;
-        private readonly IRepository<Role> roleRepository;
-        private readonly IRepository<RoleRequest> roleRequestRepository;
-        private readonly IRepository<Request> requestRepository;
+        private readonly IBaseRepository<RoleUser> roleUserRepository;
+        private readonly IBaseRepository<Role> roleRepository;
+        private readonly IBaseRepository<RoleRequest> roleRequestRepository;
+        private readonly IBaseRepository<Request> requestRepository;
 
         public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {

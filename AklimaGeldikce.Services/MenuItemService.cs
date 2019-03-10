@@ -11,7 +11,7 @@ namespace AklimaGeldikce.Services
 {
     public class MenuItemService : BaseService<MenuItem>, IMenuItemService
     {
-        private readonly IRepository<RoleMenuItem> roleMenuItemRepository;
+        private readonly IBaseRepository<RoleMenuItem> roleMenuItemRepository;
 
         public MenuItemService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {

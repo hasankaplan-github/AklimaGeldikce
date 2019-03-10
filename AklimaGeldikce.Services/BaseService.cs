@@ -13,7 +13,7 @@ namespace AklimaGeldikce.Services
         where TEntity : BaseEntity
     {
         protected readonly IUnitOfWork unitOfWork;
-        protected readonly IRepository<TEntity> repository;
+        protected readonly IBaseRepository<TEntity> repository;
 
         public BaseService(IUnitOfWork unitOfWork)
         {

@@ -13,6 +13,15 @@ namespace AklimaGeldikce.Repositories.UnitOfWork
         private readonly AppDbContext appDbContext;
         //public AppDbContext appDbContext { get; set; }
 
+        private INotificationRepository notificationRepository;
+        public INotificationRepository NotificationRepository
+        {
+            get
+            {
+                return this.notificationRepository ?? (this.notificationRepository = new NotificationRepository(this.appDbContext));
+            }
+        }
+
         public UnitOfWork(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext ?? throw new ArgumentNullException("dbContext can not be null.");
@@ -24,10 +33,10 @@ namespace AklimaGeldikce.Repositories.UnitOfWork
         }
 
         #region IUnitOfWork Members
-        public IRepository<TEntity> GetRepository<TEntity>() 
+        public IBaseRepository<TEntity> GetRepository<TEntity>() 
             where TEntity : BaseEntity
         {
-            return new Repository<TEntity>(this.appDbContext);
+            return new BaseRepository<TEntity>(this.appDbContext);
         }
 
         public int SaveChanges()
