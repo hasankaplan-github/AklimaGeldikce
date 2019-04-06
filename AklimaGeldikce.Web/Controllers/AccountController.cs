@@ -12,7 +12,6 @@ using AklimaGeldikce.Services;
 using Microsoft.AspNetCore.Http;
 using AklimaGeldikce.Web.ActionFilterAttributes;
 using AklimaGeldikce.Web.Code;
-using AklimaGeldikce.Web.Services;
 
 namespace AklimaGeldikce.Web.Controllers
 {
@@ -22,16 +21,16 @@ namespace AklimaGeldikce.Web.Controllers
         private readonly IUserService userService;
         private readonly IRoleUserService roleUserService;
         private readonly IRoleService roleService;
-        private readonly IMenuItemService menuItemService;
+        private readonly IMenuService menuService;
         private readonly IForgotPasswordService forgotPasswordService;
         private readonly IEmailService emailService;
 
-        public AccountController(IUserService userService, IRoleUserService roleUserService, IRoleService roleService, IMenuItemService menuItemService, IForgotPasswordService forgotPasswordService, IEmailService emailService)
+        public AccountController(IUserService userService, IRoleUserService roleUserService, IRoleService roleService, IMenuService menuService, IForgotPasswordService forgotPasswordService, IEmailService emailService)
         {
             this.userService = userService;
             this.roleUserService = roleUserService;
             this.roleService = roleService;
-            this.menuItemService = menuItemService;
+            this.menuService = menuService;
             this.forgotPasswordService = forgotPasswordService;
             this.emailService = emailService;
         }
@@ -49,15 +48,14 @@ namespace AklimaGeldikce.Web.Controllers
             if (user != null)
             {
                 var roleUsers = await this.roleUserService.GetManyAsync(ru => ru.UserId == user.Id);
-                string roleNames = "";
                 IList<Role> roles = new List<Role>(roleUsers.Count);
                 foreach (var roleUser in roleUsers)
                 {
                     var role = this.roleService.GetById(roleUser.RoleId);
-                    roleNames += role.Name + ",";
                     roles.Add(role);
                 }
-                roleNames = roleNames.TrimEnd(',');
+
+                var getSideBarHtmlTask = this.menuService.GetSidebarHtmlAsync(null, roles);
 
                 user.IsLoggedIn = true;
                 user.LastLoginDate = DateTime.Now;
@@ -65,7 +63,7 @@ namespace AklimaGeldikce.Web.Controllers
 
                 Response.Cookies.Append(CookieKeys.LoggedInUserId, user.Id.ToString());
                 //Response.Cookies.Append("loggedInRoleNames", roleNames);
-                Response.Cookies.Append(CookieKeys.DynamicSideBar, await this.menuItemService.GetSidebarHtmlAsync(null, roles));
+                Response.Cookies.Append(CookieKeys.DynamicSideBar, await getSideBarHtmlTask);
                 //return RedirectToAction("ProductList", "Product");
                 if (string.IsNullOrEmpty(returnUrl) == false)
                     return Redirect(returnUrl);

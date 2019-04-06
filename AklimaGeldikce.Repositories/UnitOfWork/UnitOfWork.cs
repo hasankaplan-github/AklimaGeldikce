@@ -22,6 +22,33 @@ namespace AklimaGeldikce.Repositories.UnitOfWork
             }
         }
 
+        private IUserRepository userRepository;
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                return this.userRepository ?? (this.userRepository = new UserRepository(this.appDbContext));
+            }
+        }
+
+        private IRoleMenuItemRepository roleMenuItemRepository;
+        public IRoleMenuItemRepository RoleMenuItemRepository
+        {
+            get
+            {
+                return this.roleMenuItemRepository ?? (this.roleMenuItemRepository = new RoleMenuItemRepository(this.appDbContext));
+            }
+        }
+
+        private IMenuItemRepository menuItemRepository;
+        public IMenuItemRepository MenuItemRepository
+        {
+            get
+            {
+                return this.menuItemRepository ?? (this.menuItemRepository = new MenuItemRepository(this.appDbContext));
+            }
+        }
+
         public UnitOfWork(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext ?? throw new ArgumentNullException("dbContext can not be null.");

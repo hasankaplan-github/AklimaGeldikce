@@ -4,18 +4,23 @@ using AklimaGeldikce.Repositories.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AklimaGeldikce.Services
 {
-    public class MenuItemService : BaseService<MenuItem>, IMenuItemService
+    public class MenuService : IMenuService
     {
-        private readonly IBaseRepository<RoleMenuItem> roleMenuItemRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IRoleMenuItemRepository roleMenuItemRepository;
+        private readonly IMenuItemRepository menuItemRepository;
 
-        public MenuItemService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MenuService(IUnitOfWork unitOfWork)
         {
-            this.roleMenuItemRepository = unitOfWork.GetRepository<RoleMenuItem>();
+            this.unitOfWork = unitOfWork;
+            this.menuItemRepository = unitOfWork.MenuItemRepository;
+            this.roleMenuItemRepository = unitOfWork.RoleMenuItemRepository;
         }
 
         public async Task<string> GetNavbarHtmlAsync(Guid? parentMenuItemId, IList<Role> roles, bool isDropdownItem)
@@ -28,7 +33,7 @@ namespace AklimaGeldikce.Services
                 roleIds.Add(role.Id);
             }
 
-            var menuItems = await base.repository.GetManyAsync(mi => mi.ParentMenuItemId == parentMenuItemId, q => q.OrderBy(e => e.Order));
+            var menuItems = await this.menuItemRepository.GetManyAsync(mi => mi.ParentMenuItemId == parentMenuItemId, q => q.OrderBy(e => e.Order));
             foreach (var menuItem in menuItems)
             {
                 var roleMenuItems = await this.roleMenuItemRepository.GetManyAsync(rmi => rmi.MenuItemId == menuItem.Id);
@@ -36,7 +41,7 @@ namespace AklimaGeldikce.Services
                 {
                     if (roleIds.Contains(roleMenuItem.RoleId))
                     {
-                        var childMenuItems = await base.repository.GetManyAsync(mi => mi.ParentMenuItemId == menuItem.Id);
+                        var childMenuItems = await this.menuItemRepository.GetManyAsync(mi => mi.ParentMenuItemId == menuItem.Id);
                         if (menuItem.ChildMenuItems != null && menuItem.ChildMenuItems.Count > 0)
                         {
                             menu += "<li class=\"nav-item dropdown\">" +
@@ -77,7 +82,7 @@ namespace AklimaGeldikce.Services
                 roleIds.Add(role.Id);
             }
 
-            var menuItems = await base.repository.GetManyAsync(mi => mi.ParentMenuItemId == parentMenuItemId, q => q.OrderBy(e => e.Order));
+            var menuItems = await this.menuItemRepository.GetManyAsync(mi => mi.ParentMenuItemId == parentMenuItemId, q => q.OrderBy(e => e.Order));
             foreach (var menuItem in menuItems)
             {
                 var roleMenuItems = await this.roleMenuItemRepository.GetManyAsync(rmi => rmi.MenuItemId == menuItem.Id);
@@ -85,7 +90,7 @@ namespace AklimaGeldikce.Services
                 {
                     if (roleIds.Contains(roleMenuItem.RoleId))
                     {
-                        var childMenuItems = await base.repository.GetManyAsync(mi => mi.ParentMenuItemId == menuItem.Id);
+                        var childMenuItems = await this.menuItemRepository.GetManyAsync(mi => mi.ParentMenuItemId == menuItem.Id);
                         if (menuItem.ChildMenuItems != null && menuItem.ChildMenuItems.Count > 0)
                         {
                             menu += "<li class=\"treeview\">" +
@@ -111,6 +116,39 @@ namespace AklimaGeldikce.Services
             }
 
             return menu;
+        }
+
+        public IList<MenuItem> GetAllMenuItems()
+        {
+            return this.menuItemRepository.GetAll();
+        }
+
+        public MenuItem GetMenuItemById(Guid? id)
+        {
+            return this.menuItemRepository.GetById(id);
+        }
+
+        public void CreateMenuItem(MenuItem menuItem)
+        {
+            this.menuItemRepository.Add(menuItem);
+            this.unitOfWork.SaveChanges();
+        }
+
+        public void UpdateMenuItem(MenuItem menuItem)
+        {
+            this.menuItemRepository.Update(menuItem);
+            this.unitOfWork.SaveChanges();
+        }
+
+        public void DeleteMenuItem(Guid id)
+        {
+            this.menuItemRepository.Delete(id);
+            this.unitOfWork.SaveChanges();
+        }
+
+        public bool ExistsMenuItem(Expression<Func<MenuItem, bool>> predicate)
+        {
+            return this.menuItemRepository.Exists(predicate);
         }
     }
 }

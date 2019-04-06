@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using AklimaGeldikce.Web.Models;
+using AklimaGeldikce.Entities;
 
-namespace AklimaGeldikce.Web.Services
+namespace AklimaGeldikce.Services
 {
     public class EmailService : IEmailService, IDisposable
     {

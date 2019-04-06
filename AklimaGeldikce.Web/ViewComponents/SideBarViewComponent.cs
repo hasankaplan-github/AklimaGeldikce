@@ -12,12 +12,12 @@ namespace AklimaGeldikce.Web.ViewComponents
     public class SideBarViewComponent : ViewComponent
     {
         private readonly IRoleService roleService;
-        private readonly IMenuItemService menuItemService;
+        private readonly IMenuService menuService;
 
-        public SideBarViewComponent(IRoleService roleService, IMenuItemService menuItemService)
+        public SideBarViewComponent(IRoleService roleService, IMenuService menuService)
         {
             this.roleService = roleService;
-            this.menuItemService = menuItemService;
+            this.menuService = menuService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -26,7 +26,7 @@ namespace AklimaGeldikce.Web.ViewComponents
             if (string.IsNullOrEmpty(dynamicSidebarCookie))
             {
                 var roles = await this.roleService.GetManyAsync(r => r.Name == "Guest");
-                dynamicSidebarCookie = await this.menuItemService.GetSidebarHtmlAsync(null, roles);
+                dynamicSidebarCookie = await this.menuService.GetSidebarHtmlAsync(null, roles);
                 HttpContext.Response.Cookies.Append(CookieKeys.DynamicSideBar, dynamicSidebarCookie);
             }
             return View("Default_AdminLte", dynamicSidebarCookie);

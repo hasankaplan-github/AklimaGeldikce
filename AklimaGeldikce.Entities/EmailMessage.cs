@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AklimaGeldikce.Web.Models
+namespace AklimaGeldikce.Entities
 {
     public class EmailMessage
     {

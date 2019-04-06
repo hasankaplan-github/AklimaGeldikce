@@ -1,7 +1,6 @@
 ﻿using AklimaGeldikce.DbContext;
 using AklimaGeldikce.Repositories.UnitOfWork;
 using AklimaGeldikce.Services;
-using AklimaGeldikce.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,7 +37,7 @@ namespace AklimaGeldikce.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleUserService, RoleUserService>();
             services.AddTransient<IRoleService, RoleService>();
-            services.AddTransient<IMenuItemService, MenuItemService>();
+            services.AddTransient<IMenuService, MenuService>();
             services.AddTransient<IRoleMenuItemService, RoleMenuItemService>();
             services.AddTransient<IRoleRequestService, RoleRequestService>();
             services.AddTransient<IRequestService, RequestService>();

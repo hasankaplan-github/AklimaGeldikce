@@ -15,13 +15,13 @@ namespace AklimaGeldikce.Web.Controllers
     [AuthorizeActionFilter]
     public class MenuItemController : Controller
     {
-        private readonly IMenuItemService menuItemService;
+        private readonly IMenuService menuService;
         private readonly IRoleMenuItemService roleMenuItemService;
         private readonly IRoleService roleService;
 
-        public MenuItemController(IMenuItemService menuItemService, IRoleMenuItemService roleMenuItemService, IRoleService roleService)
+        public MenuItemController(IMenuService menuService, IRoleMenuItemService roleMenuItemService, IRoleService roleService)
         {
-            this.menuItemService = menuItemService;
+            this.menuService = menuService;
             this.roleMenuItemService = roleMenuItemService;
             this.roleService = roleService;
         }
@@ -29,7 +29,7 @@ namespace AklimaGeldikce.Web.Controllers
         // GET: MenuItem
         public async Task<IActionResult> Index()
         {
-            var menuItems = (await this.menuItemService.GetAllAsync()).OrderBy(mi=>mi.Name);
+            var menuItems = this.menuService.GetAllMenuItems().OrderBy(mi=>mi.Name);
             return View(menuItems);
         }
 
@@ -41,14 +41,14 @@ namespace AklimaGeldikce.Web.Controllers
                 return NotFound();
             }
 
-            var menuItem = this.menuItemService.GetById(id);
+            var menuItem = this.menuService.GetMenuItemById(id);
             if (menuItem == null)
             {
                 return NotFound();
             }
             if(menuItem.ParentMenuItemId!=null)
             {
-                var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
+                var parentMenuItem = this.menuService.GetMenuItemById(menuItem.ParentMenuItemId);
             }
 
             return View(menuItem);
@@ -57,7 +57,7 @@ namespace AklimaGeldikce.Web.Controllers
         // GET: MenuItem/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["ParentMenuItemSelectList"] = new SelectList(await this.menuItemService.GetAllAsync(), "Id", "Name");
+            ViewData["ParentMenuItemSelectList"] = new SelectList(this.menuService.GetAllMenuItems(), "Id", "Name");
             return View();
         }
 
@@ -70,10 +70,10 @@ namespace AklimaGeldikce.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.menuItemService.Create(menuItem);
+                this.menuService.CreateMenuItem(menuItem);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentMenuItemSelectList"] = new SelectList((await this.menuItemService.GetAllAsync()).OrderBy(mi=>mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
+            ViewData["ParentMenuItemSelectList"] = new SelectList(this.menuService.GetAllMenuItems().OrderBy(mi=>mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
             return View(menuItem);
         }
 
@@ -85,12 +85,12 @@ namespace AklimaGeldikce.Web.Controllers
                 return NotFound();
             }
 
-            var menuItem = this.menuItemService.GetById(id);
+            var menuItem = this.menuService.GetMenuItemById(id);
             if (menuItem == null)
             {
                 return NotFound();
             }
-            ViewData["ParentMenuItemSelectList"] = new SelectList((await this.menuItemService.GetAllAsync()).OrderBy(mi => mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
+            ViewData["ParentMenuItemSelectList"] = new SelectList(this.menuService.GetAllMenuItems().OrderBy(mi => mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
             return View(menuItem);
         }
 
@@ -110,7 +110,7 @@ namespace AklimaGeldikce.Web.Controllers
             {
                 try
                 {
-                    this.menuItemService.Update(menuItem);
+                    this.menuService.UpdateMenuItem(menuItem);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,7 +125,7 @@ namespace AklimaGeldikce.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentMenuItemSelectList"] = new SelectList((await this.menuItemService.GetAllAsync()).OrderBy(mi => mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
+            ViewData["ParentMenuItemSelectList"] = new SelectList(this.menuService.GetAllMenuItems().OrderBy(mi => mi.Name), "Id", "Name", menuItem.ParentMenuItemId);
             return View(menuItem);
         }
 
@@ -137,14 +137,14 @@ namespace AklimaGeldikce.Web.Controllers
                 return NotFound();
             }
 
-            var menuItem = this.menuItemService.GetById(id);
+            var menuItem = this.menuService.GetMenuItemById(id);
             if (menuItem == null)
             {
                 return NotFound();
             }
             if(menuItem.ParentMenuItemId!=null)
             {
-                var parentMenuItem = this.menuItemService.GetById(menuItem.ParentMenuItemId);
+                var parentMenuItem = this.menuService.GetMenuItemById(menuItem.ParentMenuItemId);
             }
 
             return View(menuItem);
@@ -155,19 +155,19 @@ namespace AklimaGeldikce.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            this.menuItemService.Delete(id);
+            this.menuService.DeleteMenuItem(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool MenuItemExists(Guid id)
         {
-            return this.menuItemService.Exists(mi => mi.Id == id);
+            return this.menuService.ExistsMenuItem(mi => mi.Id == id);
         }
 
         // GET: MenuItem
         public async Task<IActionResult> Authorize(Guid id)
         {
-            var menuItem = this.menuItemService.GetById(id);
+            var menuItem = this.menuService.GetMenuItemById(id);
             if (menuItem == null)
             {
                 return NotFound();

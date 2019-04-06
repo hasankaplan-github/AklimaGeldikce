@@ -10,12 +10,12 @@ namespace AklimaGeldikce.Web.Controllers
 {
     public class HeaderViewComponent : ViewComponent
     {
-        private readonly IMenuItemService menuItemService;
+        private readonly IMenuService menuService;
         private readonly IRoleService roleService;
 
-        public HeaderViewComponent(IMenuItemService menuItemService, IRoleService roleService)
+        public HeaderViewComponent(IMenuService menuService, IRoleService roleService)
         {
-            this.menuItemService = menuItemService;
+            this.menuService = menuService;
             this.roleService = roleService;
         }
 
@@ -25,7 +25,7 @@ namespace AklimaGeldikce.Web.Controllers
             if (string.IsNullOrEmpty(dynamicSidebarCookie))
             {
                 var roles = await this.roleService.GetManyAsync(r => r.Name == "Guest");
-                dynamicSidebarCookie = await this.menuItemService.GetSidebarHtmlAsync(null, roles);
+                dynamicSidebarCookie = await this.menuService.GetSidebarHtmlAsync(null, roles);
                 HttpContext.Response.Cookies.Append(CookieKeys.DynamicSideBar, dynamicSidebarCookie);
             }
             return View("Default_AdminLte", dynamicSidebarCookie);
